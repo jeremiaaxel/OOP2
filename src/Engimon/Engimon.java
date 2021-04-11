@@ -38,6 +38,7 @@ abstract class Engimon {
     public String getEngimonSpesies() {
         return engimonSpesies;
     }
+    public int getEngimonLife(){ return this.engimonLife; }
     public int getEngimonLevel(){
         return engimonLevel;
     }

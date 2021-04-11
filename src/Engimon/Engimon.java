@@ -1,4 +1,6 @@
-abstract class Engimon {
+package Engimon;
+
+public abstract class Engimon {
     protected char engimonSymbol;
     protected String engimonName;
     protected String engimonSpesies;

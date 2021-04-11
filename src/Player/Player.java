@@ -1,5 +1,8 @@
+package Player;
+
 import java.util.ArrayList;
 import java.util.List;
+import Engimon.*;
 
 public class Player {
     private Tile currentPosition;
@@ -34,28 +37,29 @@ public class Player {
     }
 
     public void move(char movecode) {
+        Tile newTile;
         if (movecode == 'w') {
-            Tile newTile = map.getTileOnTop(this.currentPosition);
+            newTile = map.getTileOnTop(this.currentPosition);
         } else if (movecode == 'a') {
-            Tile newTile = map.getTileOnleft(this.currentPosition);
+            newTile = map.getTileOnleft(this.currentPosition);
         } else if (movecode == 's') {
-            Tile newTile = map.getTileBelow(this.currentPosition);
+            newTile = map.getTileBelow(this.currentPosition);
         } else if (movecode == 'd') {
-            Tile newTile = map.getTileOnRight(this.currentPosition);
+            newTile = map.getTileOnRight(this.currentPosition);
         } else {
             return;
         }
 
-        if (!T.isMoveable()) {
-            return;
+        if (!newTile.isMoveable()) {
+            throw new Exception("Tidak bisa perpindah ke tile tersebut");
         }
         
         // clear unused tile
-        Tile engTile = this.activeEngimon().getCurrentPosition();
-        map.setTileOcc(engTile.getAbsis(), engTile.getOrdinat(), ' ')
+        Tile engTile = this.getActiveEngimon().getCurrentPosition();
+        map.setTileOcc(engTile.getAbsis(), engTile.getOrdinat(), ' ');
 
         // playerpos -> activeEngPos
-        Tile playerTile = this.getCurrentPosition();
+        Tile playerTile = this.getPlayerPosition();
         playerTile.setOccupier('X');
         this.getActiveEngimon().setPosition(playerTile);
 
@@ -112,11 +116,9 @@ public class Player {
     }
 
     public void showOwnedEngimons() {
-        int counter = 0;
         println("Owned engimon(s):");
-        for (Engimon eng : this.ownedEngimon) {
-            println("(" + counter + ") " + eng.getName());
-            counter += 1;
+        for (int i = 0; i < this.ownedEngimon.size(); i++) {
+            println("(" + i + ") " + this.ownedEngimon.getItem(i).getEngimonName());
         }
     }
 
@@ -162,11 +164,10 @@ public class Player {
     }
 
     public void showSkillItem() {
-        int counter = 0;
-        println("Owned engimon(s):");
-        for (Skill item : this.ownedSkill) {
-            println("(" + counter + ") " + item.getName() + "Qnty : " + this.skillCounter.get(this.ownedSkill.getIndex(item)));
-            counter += 1;
+        println("Owned skill item(s):");
+        for (int i = 0; i < this.ownedSkill.size(); i++) {
+            Skill item = this.ownedSkill.getItem(i);
+            println("(" + i + ") " + item.getSkillName() + "Qnty : " + this.skillCounter.get(this.ownedSkill.getIndex(item)));
         }
     }
 

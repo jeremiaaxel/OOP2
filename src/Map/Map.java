@@ -121,10 +121,10 @@ public class Map {
     
     // Kalau mau nyoba, "javac Map.java && java Map"
     public static void main(String[] args) {
-        // Scanner scanner = new Scanner(System.in);
-        // String filepath = scanner.nextLine();
+        Scanner scanner = new Scanner(System.in);
+        String filepath = scanner.nextLine();
 
-        String filepath = "../../data/map.txt";
+        // String filepath = "../../data/map.txt";
         Map map = new Map();
         try {
             String map_text = map.parse(filepath);

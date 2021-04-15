@@ -17,7 +17,7 @@ public class Battle {
         }
         else if (this.getWinner() == this.engEnemy){
             updateDeadEngimonTile(map, engPlayer.getCurrentPosition());
-            this.enemyWins(map, player, listWildEgimon
+            this.enemyWins(map, player, listWildEgimon);
         }
     }
 

@@ -52,7 +52,7 @@ public class Player {
         
         // clear unused tile
         Tile engTile = this.activeEngimon().getCurrentPosition();
-        map.setTileOcc(engTile.getAbsis(), engTile.getOrdinat(), ' ')
+        map.setTileOcc(engTile.getAbsis(), engTile.getOrdinat(), ' ');
 
         // playerpos -> activeEngPos
         Tile playerTile = this.getCurrentPosition();

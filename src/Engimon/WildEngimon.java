@@ -67,14 +67,7 @@ public class WildEngimon{
     }
 
     public int getIdOfEngimon(Engimon eng){
-        int posisi = 0;
-        for (Engimon e : wildEngimonList){
-            if (e.isSame(eng)){
-                return posisi;
-            }
-            posisi++;
-        }
-        return -1;
+        return wildEngimonList.indexOf(eng);
     }
 
     public Engimon engimonOnTheTile(Tile posisyen){

@@ -199,8 +199,4 @@ abstract class Engimon {
         }
         return false;
     }
-
-    public Boolean isSame(Engimon other) {
-        return currentPosition.isSame(other.currentPosition);
-    }
 }

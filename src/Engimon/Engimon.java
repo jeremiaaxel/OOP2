@@ -82,7 +82,7 @@ abstract class Engimon {
         }
         return engimonElement[n];
     }
-    public abstract float getAdvantage(Engimon other);
+    public abstract float getAdvantage(Engimon other) throws Exception;
 
     // Setter
     public void setSymbol(char c){ this.engimonSymbol = c; }

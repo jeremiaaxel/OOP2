@@ -75,4 +75,6 @@ public class Tile {
     public Boolean isSame(Tile other){
         return absis == other.absis && ordinat == other.ordinat;
     }
+
+
 }

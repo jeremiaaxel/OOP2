@@ -70,10 +70,29 @@ public class Map {
     }
 
     public Tile getEmptyTileInRowNWithType(int N, char type) {
-        int i = 0;
-        int j = 0;
-        //
-        return this.map[i][j];
+        int i = N;
+        int j = 1;
+        boolean found = false;
+        while (!found && i < row_size-1)
+        {
+            j = 1;
+            while (!found && j < col_size-1)
+            {
+                if (map[i][j].getType() == type && map[i][j].getOccupierCode() == ' ')
+                {
+                    found = true;
+                }
+                else
+                {
+                    j++;
+                }
+            }
+            if (!found)
+            {
+                i++;
+            }
+        }
+        return map[i][j];
     }
 
     public void setTileOcc(int nobaris, int nokolom, char occCode) { //Set occ di tile di titik tertent 
@@ -118,13 +137,24 @@ public class Map {
         }
     }
 
+    public void getSurroundingTile(final Tile t, Tile[] surrTile)
+    {
+        if (surrTile.length < 4){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        surrTile[0] = getTileOnTop(t);
+        surrTile[1] = getTileOnRight(t);
+        surrTile[2] = getTileBelow(t);
+        surrTile[3] = getTileOnleft(t);
+    }
+
     
     // Kalau mau nyoba, "javac Map.java && java Map"
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String filepath = scanner.nextLine();
 
-        // String filepath = "../../data/map.txt";
+//        String filepath = "../../data/map.txt";
         Map map = new Map();
         try {
             String map_text = map.parse(filepath);

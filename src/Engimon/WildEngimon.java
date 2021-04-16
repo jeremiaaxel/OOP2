@@ -26,7 +26,7 @@ public class WildEngimon{
         if (n < 0 || n >= getNumberOfWildEngimon()){
             throw new IndexOutOfBoundsException();
         }
-        this.getNthEngimon(n).getCurrentPosition().setTileOcc(' ');
+        this.getNthEngimon(n).getCurrentPosition().setOccupier(' ');
         wildEngimonList.remove(n);
     }
     public void randomMove(Map map){

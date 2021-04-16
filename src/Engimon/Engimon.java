@@ -54,7 +54,7 @@ abstract class Engimon {
     public int getNumberOfElement(){
         return numberOfElement;
     }
-    public float getPower(Engimon other){
+    public float getPower(Engimon other) throws Exception {
         return engimonLevel*getAdvantage(other) + getSkillTotalPower();
     }
     public Tile getCurrentPosition(){
@@ -147,7 +147,11 @@ abstract class Engimon {
     public void displayAllEngimonSkill(){
         for (int i = 0; i < numberOfSkill; i++){
             System.out.println("- Skill " + (i+1));
-            engimonSkill[i].displaySkillInfo();
+            try {
+                engimonSkill[i].displaySkillInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -168,7 +172,7 @@ abstract class Engimon {
         if (movecode == 'w'){
             T = map.getTileOnTop(currentPosition);
         } else if (movecode == 'a'){
-            T = map.getTileOnLeft(currentPosition);
+            T = map.getTileOnleft(currentPosition);
         } else if (movecode == 's'){
             T = map.getTileBelow(currentPosition);
         } else if (movecode == 'd'){

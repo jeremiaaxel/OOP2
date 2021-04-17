@@ -6,7 +6,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 
 public class MenuState extends GameState{
@@ -68,6 +67,7 @@ public class MenuState extends GameState{
     private void setUserChoice(){
         switch (userChoice){
             case 0 : //newgame
+                gameStateManager.setGameStates(GameStateManager.NEWGAME);
                 break;
             case 1 : // load game
                 break;

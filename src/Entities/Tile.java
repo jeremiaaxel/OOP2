@@ -1,10 +1,21 @@
 package Entities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class Tile {
     private int absis;
     private int ordinat;
     private char type;
+        /* g : Grassland
+           m : Mountains
+           t : Tundra
+           s : Sea */
     private char occupierCode;
+
+    private BufferedImage tileImg;
 
     public Tile() {
         //
@@ -20,6 +31,27 @@ public class Tile {
         this.ordinat = y;
         this.type = type;
         this.occupierCode = occupierCode;
+        loadTile();
+    }
+
+    public void loadTile() {
+        if (type != '#'){
+            String imgpath = null;
+            if (type == 'm'){
+                imgpath = "resources/mountains.jpg";
+            } else if (type == 's'){
+                imgpath = "resources/sea.png";
+            } else if (type == 'g'){
+                imgpath = "resources/grassland.jpg";
+            } else if (type == 't'){
+                imgpath = "resources/tundra.jpg";
+            }
+            try {
+                tileImg = ImageIO.read(new FileInputStream(imgpath));
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     public void set(Tile tile) {
@@ -47,6 +79,10 @@ public class Tile {
     public char getOccupierCode() {
         //
         return this.occupierCode;
+    }
+
+    public BufferedImage getImage() {
+        return tileImg;
     }
 
     public void setAbsis(int x) {

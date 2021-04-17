@@ -1,13 +1,19 @@
 package Entities;
 
+import Game.GamePanel;
 import java.io.*;
 import java.util.Scanner;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.ImageIO;
 
 public class Map {
     private Tile[][] map;
     private int row_size;
     private int col_size;
-    
+    private int tilesize;
+
     public Map() {
         //
         this.row_size = 0;
@@ -18,6 +24,7 @@ public class Map {
         //
         this.row_size = banyak_baris;
         this.col_size = banyak_kolom;
+        this.tilesize = GamePanel.HEIGHT*GamePanel.SCALE /row_size;
         this.map = new Tile[row_size][col_size];
         
         for (int i = 0; i < row_size; i++) {
@@ -27,13 +34,26 @@ public class Map {
         }
     }
 
+    public void drawMap(Graphics2D g){
+        for (int i = 1; i < row_size-1; i++){
+            for (int j = 1; j < col_size-1; j++){
+                g.drawImage(
+                        map[i][j].getImage(),
+                        (j-1) * tilesize,
+                        (i-1) * tilesize,
+                        tilesize,
+                        tilesize,
+                        null
+                );
+            }
+        }
+    }
+
     public int getNumberOfRow() {
-        //
         return this.row_size;
     }
 
     public int getNumberOfColumn() {
-        //
         return this.col_size;
     }
 

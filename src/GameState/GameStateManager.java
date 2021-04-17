@@ -9,7 +9,7 @@ public class GameStateManager {
     private int currentState;
 
     public static final int MENUSTATE = 0;
-    public static final int GAME = 1;
+    public static final int NEWGAME = 1;
     public static final int HELP = 2;
 
     public GameStateManager(){
@@ -17,6 +17,8 @@ public class GameStateManager {
         currentState = MENUSTATE;
 
         gameStates.add(new MenuState(this));
+        gameStates.add(new NewGameState(this));
+
     }
 
     public void setGameStates(int state){

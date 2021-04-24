@@ -94,6 +94,10 @@ public class Map {
         return this.map[nobaris][nokolom];
     }
 
+    public Tile getTile(Tile tile) {
+        return this.map[tile.getOrdinat()][tile.getAbsis()];
+    }
+
     public Tile[] getSurroundingTile(Tile tile) {
         //
         Tile surrTile[] = new Tile[4];
@@ -154,6 +158,9 @@ public class Map {
         //
         this.map[nobaris][nokolom].setOccupier(occCode);
     }
+    public void setTileOcc(Tile tile, char occCode) {
+        this.map[tile.getOrdinat()][tile.getAbsis()].setOccupier(occCode);
+    }
 
     public void displayMap() {
         //
@@ -177,7 +184,6 @@ public class Map {
         Scanner scanner = null;
         try (FileInputStream fis = new FileInputStream(filepath)) {
             scanner = new Scanner(fis);
-
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 text = text.concat(line);
@@ -188,7 +194,7 @@ public class Map {
             throw e;
             
         } finally {
-            scanner.close();
+            if (scanner != null) scanner.close();
         }
     }
 

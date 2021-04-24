@@ -228,4 +228,8 @@ public abstract class Engimon {
         System.out.println("Cumulative Experience  : " + getCumulativeExp());
         System.out.println("Life                   : " + getEngimonLife());
     }
+
+    public void setEngimonName(String name) {
+        this.engimonName = name;
+    }
 }

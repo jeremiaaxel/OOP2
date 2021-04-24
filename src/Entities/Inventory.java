@@ -1,10 +1,11 @@
 package Entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory<T> {
     // privates
-    private List<T> item_list;
+    private List<T> item_list = new ArrayList<T>();
     private static final int MAX_CAPACITY = 10;
     private static int used_capacity = 0;
 
@@ -37,9 +38,9 @@ public class Inventory<T> {
         return used_capacity == 0;
     }
 
-    public void add(T item) {
+    public void add(T item) throws Exception {
         if (isFull()) {
-            // "FULL"
+            throw new Exception("Inventory is full!");
         }
         this.item_list.add(item);
         incrUsed();

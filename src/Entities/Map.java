@@ -14,23 +14,55 @@ public class Map {
     private int col_size;
     private int tilesize;
 
+    public static BufferedImage mountain_tile;
+    public static BufferedImage grassland_tile;
+    public static BufferedImage tundra_tile;
+    public static BufferedImage sea_tile;
+
     public Map() {
         //
         this.row_size = 0;
         this.col_size = 0;
+
+        loadTileImg();
     }
 
     public Map(int banyak_baris, int banyak_kolom, String map_entry) {
         //
+        char type;
         this.row_size = banyak_baris;
         this.col_size = banyak_kolom;
         this.tilesize = (GamePanel.WIDTH*GamePanel.SCALE - 200)/(col_size);
         this.map = new Tile[row_size][col_size];
+        loadTileImg();
         
         for (int i = 0; i < row_size; i++) {
             for (int j = 0; j < col_size; j++) {
-                map[i][j] = new Tile(i, j, map_entry.charAt((i*(col_size))+j), ' ');
+                type = map_entry.charAt((i * (col_size)) + j);
+
+                if (type != '#') {
+                    if (type == 'm') {
+                        map[i][j] = new Tile(i, j, type, ' ', mountain_tile);
+                    } else if (type == 's') {
+                        map[i][j] = new Tile(i, j, type, ' ', sea_tile);
+                    } else if (type == 'g') {
+                        map[i][j] = new Tile(i, j, type, ' ', grassland_tile);
+                    } else if (type == 't') {
+                        map[i][j] = new Tile(i, j, type, ' ', tundra_tile);
+                    }
+                }
             }
+        }
+    }
+
+    public void loadTileImg(){
+        try{
+            mountain_tile = ImageIO.read(new FileInputStream("resources/mountains.jpg"));
+            grassland_tile = ImageIO.read(new FileInputStream("resources/grassland.jpg"));
+            tundra_tile = ImageIO.read(new FileInputStream("resources/tundra.jpg"));
+            sea_tile = ImageIO.read(new FileInputStream("resources/sea.png"));
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 

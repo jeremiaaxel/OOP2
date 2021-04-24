@@ -25,33 +25,13 @@ public class Tile {
         this.occupierCode = ' ';
     }
 
-    public Tile(int x, int y, char type, char occupierCode) {
+    public Tile(int x, int y, char type, char occupierCode, BufferedImage img) {
         //
         this.absis = x;
         this.ordinat = y;
         this.type = type;
         this.occupierCode = occupierCode;
-        loadTile();
-    }
-
-    public void loadTile() {
-        if (type != '#'){
-            String imgpath = null;
-            if (type == 'm'){
-                imgpath = "resources/mountains.jpg";
-            } else if (type == 's'){
-                imgpath = "resources/sea.png";
-            } else if (type == 'g'){
-                imgpath = "resources/grassland.jpg";
-            } else if (type == 't'){
-                imgpath = "resources/tundra.jpg";
-            }
-            try {
-                tileImg = ImageIO.read(new FileInputStream(imgpath));
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-        }
+        this.tileImg = img;
     }
 
     public void set(Tile tile) {

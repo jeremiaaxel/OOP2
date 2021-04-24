@@ -80,6 +80,8 @@ public class MenuState extends GameState{
                 break;
         }
     }
+
+    @Override
     public void keyPressed(int k){
         switch (k){
             case KeyEvent.VK_ENTER:

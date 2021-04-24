@@ -20,6 +20,6 @@ public class Parent {
     }
     void displayInfo(){
         System.out.print(parent1name +" (Spesies " + parent1species + "'), ");
-        System.out.println(parent1name +" (Spesies " + parent1species + "'), ");
+        System.out.println(parent2name +" (Spesies " + parent2species + "'), ");
     }
 }

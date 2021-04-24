@@ -160,7 +160,7 @@ public abstract class Engimon {
     public void displayAllEngimonSkillName(){
         if (numberOfSkill > 0){
             System.out.print(engimonSkill[0].getName());
-            for (int i = 0; i < numberOfSkill; i++) {
+            for (int i = 1; i < numberOfSkill; i++) {
                 System.out.print(", " + engimonSkill[i].getName());
             }
         } else{
@@ -204,5 +204,27 @@ public abstract class Engimon {
             return t.getType() == 'o';
         }
         return false;
+    }
+
+    public void displayAllEngimonElement(){
+        int counter = 0;
+        for (String el: engimonElement) {
+            System.out.print(el);
+            if (counter != numberOfElement-1){
+                System.out.print(",");
+            }
+            counter++;
+        }
+    }
+
+    public void displayEngimonInfo(){
+        System.out.println("Name                   : " + getEngimonName());
+        System.out.println("Parent                 : "); engimonParent.displayInfo();
+        System.out.println("Skill                  : "); displayAllEngimonSkillName();;
+        System.out.println("Element                : "); displayAllEngimonElement();
+        System.out.println("Level                  : " + getEngimonLevel());
+        System.out.println("Experience             : " + getEngimonExp());
+        System.out.println("Cumulative Experience  : " + getCumulativeExp());
+        System.out.println("Life                   : " + getEngimonLife());
     }
 }

@@ -1,9 +1,10 @@
 package Entities;
 
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.Map;
 
-public class Player {
+public class Player extends MapObject {
     private String name;
     private Tile currentPosition = new Tile();
     private Inventory<Engimon> ownedEngimon = new Inventory<>();
@@ -14,9 +15,17 @@ public class Player {
     private void println(String string) {
         System.out.println(string);
     }
-    
+
+    private ArrayList<BufferedImage[]> sprites;
+//    private final int[] numFrames = ();
+
+    // animation actions
+    private static final int IDLE = 0;
+    private static final int WALKING = 1;
+
     /* ************ PLAYER ************ */
-    public Player(String name) {
+    public Player(String name, Entities.Map map) {
+        super(map);
         this.name = name;
         this.currentPosition.setAbsis(7);
         this.currentPosition.setOrdinat(5);

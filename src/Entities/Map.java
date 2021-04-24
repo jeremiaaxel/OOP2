@@ -24,7 +24,7 @@ public class Map {
         //
         this.row_size = banyak_baris;
         this.col_size = banyak_kolom;
-        this.tilesize = GamePanel.HEIGHT*GamePanel.SCALE /row_size;
+        this.tilesize = (GamePanel.WIDTH*GamePanel.SCALE - 200)/(col_size);
         this.map = new Tile[row_size][col_size];
         
         for (int i = 0; i < row_size; i++) {

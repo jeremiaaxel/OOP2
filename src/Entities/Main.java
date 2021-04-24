@@ -6,12 +6,6 @@ public class Main {
     private static String mapPath = "../data/map.txt";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Insert player name : ");
-        String playerName = scanner.nextLine();
-        Player player = new Player(playerName);
-
-        System.out.println("Welcome " + playerName);
         
         Map map = new Map();
         try {
@@ -24,6 +18,13 @@ public class Main {
         } finally {
             scanner.close();
         }
+
+
+        System.out.print("Insert player name : ");
+        String playerName = scanner.nextLine();
+        Player player = new Player(playerName,map);
+
+        System.out.println("Welcome " + playerName);
 
         String command = scanner.nextLine();
         while (!command.equals("exit")) {

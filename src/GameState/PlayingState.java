@@ -6,7 +6,10 @@ import Game.GamePanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class PlayingState extends GameState{
 
@@ -20,6 +23,14 @@ public class PlayingState extends GameState{
         this.gameStateManager = gameStateManager;
         this.newgame = newgame;
         init();
+    }
+
+    private void print(Object obj, Object end) {
+        System.out.print(obj);
+        System.out.print(end);
+    }
+    private void print(Object obj) {
+        System.out.println(obj);
     }
 
     public void init(){
@@ -38,6 +49,7 @@ public class PlayingState extends GameState{
     }
 
     public void load(){
+        print("Belum ada");
     }
 
     public void update(){
@@ -62,7 +74,7 @@ public class PlayingState extends GameState{
                 this.player.setRight(true);
                 break;
             case KeyEvent.VK_S:
-//                savegame();
+                savegame();
                 break;
             case KeyEvent.VK_1:
 //                commandPlayer1
@@ -113,5 +125,27 @@ public class PlayingState extends GameState{
         // draw map
         map.drawMap(g);
         player.draw(g);
+    }
+
+    public void savegame() {
+        print("Nama file penyimpanan : ", "");
+        Scanner scanner = new Scanner(System.in);
+        String filepath = scanner.nextLine();
+        String dataPath = "data/";
+
+        try {
+            File saveFile = new File(dataPath+filepath+".txt");
+            boolean isExist = saveFile.createNewFile();
+            FileOutputStream outFile = new FileOutputStream(saveFile, false);
+
+            // nyimpen data-data yang perlu.
+            /* DATA-DATA YANG PERLU DISAVE?
+            https://www.tutorialspoint.com/java/java_serialization.htm
+            * */
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

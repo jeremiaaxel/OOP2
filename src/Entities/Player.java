@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * mengganti nama suatu engimon : changeEngimonName; tested
  * */
 
-public class Player extends MapObject {
+public class Player extends MapObject implements Serializable {
     private String name;
     private Tile currentPosition = new Tile();
     private Inventory<Engimon> ownedEngimon = new Inventory<Entities.Engimon>();

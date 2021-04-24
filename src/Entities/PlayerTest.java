@@ -34,7 +34,7 @@ public class PlayerTest {
         String filepath = "data/map.txt";
         try {
             String map_text = map.parse(filepath);
-            map = new Map(16, 21, map_text);
+            map = new Map(16, 20, map_text);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -203,6 +203,21 @@ public class PlayerTest {
             p.showSkillItem();
         } catch (Exception e) {
             println(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    void testSerializeable() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("data/test.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(p);
+            out.close();
+            fileOut.close();
+            println("Done");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assert false;
         }
     }
 }

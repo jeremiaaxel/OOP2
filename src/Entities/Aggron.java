@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Aggron extends Engimon{
+public class Aggron extends Engimon implements Serializable {
     
     public Aggron(String name, Parent parent, Tile position){
         super('g',name,"Aggron",parent,position);

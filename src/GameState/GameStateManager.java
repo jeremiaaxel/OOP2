@@ -20,6 +20,9 @@ public class GameStateManager {
         gameStates.add(new MenuState(this));
         gameStates.add(new PlayingState(this, true));
 
+        // load
+//        gameStates.add(new PlayingState(this, false));
+
 
     }
 

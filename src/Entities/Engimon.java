@@ -73,17 +73,18 @@ public abstract class Engimon {
         return this.messageUnik;
     }
     public Skill getNthEngimonSkill(int n){
-        if (n >= numberOfSkill || n < 0){
+        if (n > numberOfSkill || n <= 0){
             throw new IndexOutOfBoundsException();
         }
-        return engimonSkill[n];
+        return engimonSkill[n-1];
     }
     public String getNthEngimonElement(int n){
-        if (n >= numberOfElement || n < 0){
+        if (n > numberOfElement || n <= 0){
             throw new IndexOutOfBoundsException();
         }
-        return engimonElement[n];
+        return engimonElement[n-1];
     }
+
     public abstract float getAdvantage(Engimon other) throws Exception;
 
     // Setter

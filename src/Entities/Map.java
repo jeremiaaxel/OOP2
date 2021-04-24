@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.Scanner;
 import java.awt.*;
 import java.awt.image.*;
-import java.io.*;
 import javax.imageio.ImageIO;
 
 public class Map {
@@ -24,6 +23,7 @@ public class Map {
         this.row_size = 0;
         this.col_size = 0;
 
+
         loadTileImg();
     }
 
@@ -32,7 +32,6 @@ public class Map {
         char type;
         this.row_size = banyak_baris;
         this.col_size = banyak_kolom;
-        this.tilesize = (GamePanel.WIDTH*GamePanel.SCALE - 200)/(col_size);
         this.map = new Tile[row_size][col_size];
         loadTileImg();
         
@@ -89,8 +88,9 @@ public class Map {
         return this.col_size;
     }
 
+    public int getTilesize(){ return this.tilesize;}
+
     public Tile getTile(int nobaris, int nokolom) {
-        //
         return this.map[nobaris][nokolom];
     }
 
@@ -148,6 +148,10 @@ public class Map {
             }
         }
         return map[i][j];
+    }
+
+    public void setTileSize(int size){
+        this.tilesize = size;
     }
 
     public void setTileOcc(int nobaris, int nokolom, char occCode) { //Set occ di tile di titik tertent 

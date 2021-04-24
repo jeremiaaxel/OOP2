@@ -19,6 +19,8 @@ public class GameStateManager {
 
         gameStates.add(new MenuState(this));
         gameStates.add(new PlayingState(this, true));
+
+
     }
 
     public void setGameStates(int state){

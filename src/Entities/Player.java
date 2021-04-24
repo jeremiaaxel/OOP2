@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Player extends MapObject {
     private String name;
@@ -21,20 +20,6 @@ public class Player extends MapObject {
     }
 
     private ArrayList<BufferedImage[]> sprites;
-
-    private Animation animation;
-
-//    private static BufferedImage player;
-//    private static BufferedImage player_2;
-//    private static BufferedImage player_back;
-//    private static BufferedImage player_back_2;
-//    private static BufferedImage player_left;
-//    private static BufferedImage player_left_2;
-//    private static BufferedImage player_right;
-//    private static BufferedImage player_right_2;
-
-
-//    private final int[] numFrames = ();
 
     // animation actions
     private static final int IDLE = 0;
@@ -54,10 +39,19 @@ public class Player extends MapObject {
         this.ownedSkill = new Inventory<Skill>();
         this.skillCounter = new ArrayList<Integer>();
         this.activeEngimonId = 0;
+        this.setPosition(7 * map.getTilesize(), 5 * map.getTilesize());
+        moveDistance = 0.8;
+
 
         // load sprites
+        loadSprites();
+    }
+
+    public void loadSprites(){
         try
         {
+            sprites = new ArrayList<>();
+
             BufferedImage[] img_buffer_list = new BufferedImage[1];
             img_buffer_list[0] = ImageIO.read(new FileInputStream("resources/player.png"));
 
@@ -70,7 +64,7 @@ public class Player extends MapObject {
             sprites.add(img_buffer_list1);
 
             BufferedImage[] img_buffer_list2 = new BufferedImage[2];
-            img_buffer_list2[0] = ImageIO.read(new FileInputStream("resources/player.png"));
+            img_buffer_list2[0] = ImageIO.read(new FileInputStream("resources/player_back.png"));
             img_buffer_list2[1] = ImageIO.read(new FileInputStream("resources/player_back_2.png"));
 
             sprites.add(img_buffer_list2);
@@ -86,15 +80,6 @@ public class Player extends MapObject {
             img_buffer_list4[1] = ImageIO.read(new FileInputStream("resources/player_right_2.png"));
 
             sprites.add(img_buffer_list4);
-
-//            player = ImageIO.read(new FileInputStream("resources/player.png"));
-//            player_2 = ImageIO.read(new FileInputStream("resources/player_2.png"));
-//            player_back = ImageIO.read(new FileInputStream("resources/player_back.png"));
-//            player_back_2 = ImageIO.read(new FileInputStream("resources/player_back_2.png"));
-//            player_left = ImageIO.read(new FileInputStream("resources/player_left.png"));
-//            player_left_2 = ImageIO.read(new FileInputStream("resources/player_left_2.png"));
-//            player_right = ImageIO.read(new FileInputStream("resources/player_right.png"));
-//            player_right_2 = ImageIO.read(new FileInputStream("resources/player_right_2.png"));
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -102,7 +87,7 @@ public class Player extends MapObject {
         animation = new Animation();
         currentAction = IDLE;
         animation.setFrames(sprites.get(currentAction));
-        animation.setDelay(400);
+        animation.setDelay(800);
     }
 
     public Tile getPlayerPosition() {
@@ -257,56 +242,81 @@ public class Player extends MapObject {
     }
 
     public void nextPosition(){
+        if (left){
+            xtemp -= moveDistance;
+//            xtemp = x - moveDistance;
+            ytemp = y;
+        } else if (right){
+            xtemp += moveDistance;
+//            xtemp = x + moveDistance;
+            ytemp = y;
+        } else if (up){
+            xtemp = x;
+            ytemp -= moveDistance;
+//            ytemp = y - moveDistance;
+        } else if (down){
+            xtemp = x;
+            ytemp += moveDistance;
+//            ytemp = y + moveDistance;
+        } else {
+            xtemp = x;
+            ytemp = y;
+        }
 
+        if (xtemp<0 || ytemp <0
+                || ytemp >= map.getTilesize()*(map.getNumberOfRow()-3)
+                || xtemp >= map.getTilesize()*(map.getNumberOfColumn()-3)){
+            xtemp = x;
+            ytemp = y;
+        }
     }
 
     public void update(){
 //        // update position
-//        getNextPosition();
+        nextPosition();
 //        checkCollision();
-//        setPosition();
-        boolean left = false;
-        boolean right = false;
-        boolean up = false;
-        boolean down = false;
+        setPosition(xtemp,ytemp);
 
         // set animation
-        if (currentAction == IDLE){
+        if (currentAction == IDLE && (left || down || right || up)){
             if (left){
                 currentAction = WALKING_LEFT;
-                animation.setFrames(sprites.get(WALKING_LEFT));
+                animation.setFrames(sprites.get(currentAction));
+                animation.setDelay(100);
             } else if (right){
                 currentAction = WALKING_RIGHT;
-                animation.setFrames(sprites.get(WALKING_RIGHT));
+                animation.setFrames(sprites.get(currentAction));
+                animation.setDelay(100);
             } else if (up){
                 currentAction = WALKING_UP;
-                animation.setFrames(sprites.get(WALKING_UP));
+                animation.setFrames(sprites.get(currentAction));
+                animation.setDelay(100);
             } else{
-
+                currentAction = WALKING_DOWN;
+                animation.setFrames(sprites.get(currentAction));
+                animation.setDelay(100);
             }
-            animation.setDelay(400);
-            width = 30;
+        } else if (!(left || down || right || up)){
+                currentAction = IDLE;
+                animation.setFrames(sprites.get(currentAction));
+                animation.setDelay(500);
         }
+
+        animation.update();
     }
 
     public void draw(Graphics2D g){
-        if (facingRight){
+        if (left || right || up || down){
             g.drawImage(animation.getImage(),
-                    (int) (x + x_map - width / 2 + width),
-                    (int) (y + y_map - height / 2),
+                    (int) (x),
+                    (int) (y),
                     width,
                     height,
                     null);
-            return;
-        }
-
-        if (facingUp){
+        } else {
+            //IDLE
             g.drawImage(animation.getImage(),
-                    (int) (x + x_map - width / 2 + width),
-                    (int) (y + y_map - height / 2),
-                    width,
-                    height,
-                    null);
+                    (int) x, (int) y, width, height, null);
         }
     }
 }

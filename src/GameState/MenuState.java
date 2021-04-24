@@ -81,7 +81,6 @@ public class MenuState extends GameState{
         }
     }
 
-    @Override
     public void keyPressed(int k){
         switch (k){
             case KeyEvent.VK_ENTER:
@@ -106,9 +105,7 @@ public class MenuState extends GameState{
         }
     }
 
-    public void keyReleased(int k){
-
-    }
+    public void keyReleased(int k){}
 
 
 }

@@ -1,3 +1,4 @@
+/*
 package Entities;
 
 import java.io.*;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 public class PlayerTest {
     private static Player p;
-    private static Parent parent = new Parent();
+    private static Parent parent;
     private static Map map = new Map();
 
     public void println(Object obj) {
@@ -39,9 +40,11 @@ public class PlayerTest {
             System.out.println(e.getMessage());
         }
 
-        p = new Player("Test", map);
+        p = new Player("ULLLAA", map);
 
-        Parent parent = new Parent();
+        p.setPlayerPosition(map, map.getTile(5, 6));
+        parent = new Parent("Ula", "Uli", "Ulu", "Ulo");
+
         Engimon eng1 = new Aggron("Aggron", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
 
@@ -209,7 +212,7 @@ public class PlayerTest {
     @Test
     void testSerializeable() {
         try {
-            FileOutputStream fileOut = new FileOutputStream("data/test.ser");
+            FileOutputStream fileOut = new FileOutputStream("data/test.txt");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(p);
             out.close();
@@ -220,4 +223,23 @@ public class PlayerTest {
             assert false;
         }
     }
+
+    @Test
+    void testDeSerializeable() {
+        try {
+            FileInputStream fileIn = new FileInputStream("data/test.txt");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            Player play = (Player)in.readObject();
+            in.close();
+            fileIn.close();
+            println(play.getPlayerName());
+            println(play.getPlayerPosition().getAbsis() + "," + play.getPlayerPosition().getOrdinat());
+            play.getEngimon(0).getEngimonParent().displayInfo();
+            println("Done");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assert false;
+        }
+    }
 }
+*/

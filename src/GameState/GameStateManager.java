@@ -19,6 +19,7 @@ public class GameStateManager {
 
         gameStates.add(new MenuState(this));
         gameStates.add(new PlayingState(this, true));
+        gameStates.add(new PlayingState(this, false));
 
         // load
 //        gameStates.add(new PlayingState(this, false));
@@ -26,7 +27,7 @@ public class GameStateManager {
 
     }
 
-    public void setGameStates(int state){
+     public synchronized void setGameStates(int state){
         currentState = state;
         gameStates.get(currentState).init();
     }

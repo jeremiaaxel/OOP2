@@ -1,8 +1,9 @@
 package Entities;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class MapObject {
+public class MapObject implements Serializable {
 
     protected Map map;
     protected int x_map = -1; // absis terhadap map
@@ -51,7 +52,7 @@ public class MapObject {
         return (int) (y/map.getTilesize() + 1);
     }
 
-    public void setPosition(double x, double y){
+    public synchronized void setPosition(double x, double y){
         if (this.x_map!=-1){
             map.setTileOcc(this.y_map,this.x_map,map.NO_OCCUPIER);
         }
@@ -64,7 +65,7 @@ public class MapObject {
         map.setTileOcc(y_map,x_map,map.OCCUPIED);
     }
 
-    public void setPositionByMap(int x_map, int y_map){
+    public synchronized void setPositionByMap(int x_map, int y_map){
         if (this.x_map!=-1){
             map.setTileOcc(this.y_map,this.x_map,map.NO_OCCUPIER);
         }

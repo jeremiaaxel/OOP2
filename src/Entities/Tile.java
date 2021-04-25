@@ -16,7 +16,7 @@ public class Tile implements Serializable {
            s : Sea */
     private char occupierCode;
 
-    private BufferedImage tileImg;
+    private transient BufferedImage tileImg;
 
     public Tile() {
         //

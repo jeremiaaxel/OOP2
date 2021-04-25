@@ -1,6 +1,7 @@
 package Entities;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.html.parser.Entity;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -36,7 +37,7 @@ public class Player extends MapObject implements Serializable {
         System.out.println(obj);
     }
 
-    private ArrayList<BufferedImage[]> sprites;
+    private transient ArrayList<BufferedImage[]> sprites;
 
     // animation actions
     private static final int IDLE = 0;
@@ -56,13 +57,62 @@ public class Player extends MapObject implements Serializable {
         this.ownedEngimon = new Inventory<Engimon>();
         this.ownedSkill = new Inventory<Skill>();
         this.skillCounter = new ArrayList<Integer>();
-        this.setPositionByMap(7, 5);
+        this.setPositionByMap(this.currentPosition.getAbsis(), this.currentPosition.getOrdinat());
         moveDistance = 1;
+    }
+
+    public Player(Player playerin, Entities.Map map) {
+        super(map);
+        this.name = playerin.name;
+        this.setPlayerPosition(playerin.getPlayerPosition());
+        this.ownedEngimon = new Inventory<Engimon>();
+        // masukin engimon
+        for (int i = 0; i < playerin.getOwnedEngimonSize(); i++) {
+            this.addEngimon(playerin.getEngimon(i));
+        }
+
+        this.ownedSkill = new Inventory<Skill>();
+        this.skillCounter = new ArrayList<Integer>();
+        // masukin skill item
+        for (int i = 0; i < playerin.getOwnedSkillItemSize(true); i++) {
+            for (int j = 0; j < playerin.getSkillItemQuantity(i); j++) {
+                this.addSkillItem(playerin.getSkillItem(i));
+            }
+        }
+
+        this.setPositionByMap(this.currentPosition.getAbsis(), this.currentPosition.getOrdinat());
+        moveDistance = 1;
+
+        this.setActiveEngimonPosition(playerin.getActiveEngimon().getCurrentPosition());
 
         // load sprites
         loadSprites();
+    }
 
-        init();
+    public String describe() throws Exception {
+        String result = "";
+
+        // PLAYER SECTION
+        result.concat(this.getPlayerName() + "\n");
+
+        Tile playerPosition = this.getPlayerPosition();
+        result.concat(playerPosition.getAbsis() + "," + playerPosition.getOrdinat());
+
+        // ENGIMONS SECTION
+        List<Engimon> playerOwnedEngimons = new ArrayList<>();
+        for (int i = 0; i < this.getOwnedEngimonSize(); i++) {
+            Engimon currEng = this.getEngimon(i);
+
+
+            playerOwnedEngimons.add(this.getEngimon(i));
+        }
+
+        List<Skill> playerOwnedSkills = new ArrayList<>();
+        for (int i = 0; i < this.getOwnedSkillItemSize(true); i++) {
+            playerOwnedSkills.add(this.getSkillItem(i));
+        }
+
+        return result;
     }
 
 
@@ -109,21 +159,7 @@ public class Player extends MapObject implements Serializable {
         animation.setDelay(800);
     }
 
-    public void init(){
-        Engimon eng1 = new Blaziken("my blaziken", new Parent(), currentPosition,map);
-        Engimon eng2 = new Ampharos("my ampharos", new Parent(), currentPosition,map);
-        Engimon eng3 = new Aggron("my aggron", new Parent(), currentPosition,map);
-        Engimon eng4 = new Araquanid("my araquanid", new Parent(),currentPosition,map);
-        Engimon eng5 = new Eiscue("my eiscue", new Parent(),currentPosition,map);
-        addEngimon(eng1);
-        addEngimon(eng2);
-        addEngimon(eng3);
-        addEngimon(eng4);
-        addEngimon(eng5);
-        setActiveEngimonId(0);
-        setActiveEngimonPosition(map.getTile(5,8));
-        vertical = false; //active eng dan player segaris horizontal
-    }
+    public String getPlayerName() { return this.name; }
 
     public Tile getPlayerPosition() { return this.currentPosition; }
 
@@ -168,7 +204,7 @@ public class Player extends MapObject implements Serializable {
         }
     }
 
-    private void setActiveEngimonId(int id) {
+    public void setActiveEngimonId(int id) {
         this.activeEngimonId = id;
     }
 
@@ -307,6 +343,16 @@ public class Player extends MapObject implements Serializable {
         return size;
     }
 
+    public int getOwnedSkillItemSize(boolean distinct) {
+        if (distinct) {
+            return this.ownedSkill.size();
+        } else {
+            return getOwnedSkillItemSize();
+        }
+    }
+
+    public int getSkillItemQuantity(int index) { return this.skillCounter.get(index); }
+
     public void throwSomeSkillItems(Skill skill, int amount) {
         int itemIndex = isSkillOwned(skill);
         // Kalau punya
@@ -329,7 +375,7 @@ public class Player extends MapObject implements Serializable {
 
     }
 
-    public void nextPosition(){
+    public synchronized void nextPosition(){
         if (left){
             xtemp -= moveDistance;
             ytemp = y;
@@ -395,7 +441,7 @@ public class Player extends MapObject implements Serializable {
         getActiveEngimon().setPosition(xactiveEng,yactiveEng);
     }
 
-    public void update(){
+    public synchronized void update(){
         // update semua engimon player
         ArrayList<Engimon> engToDelete = new ArrayList<>();
         Engimon eng;

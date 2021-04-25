@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Skill {
+public class Skill implements Serializable {
     protected String name;
     protected int basePower;
     protected int masteryLevel;
@@ -68,6 +69,18 @@ public class Skill {
         {
             System.out.println(" - " + getNthCompatibleElement(i));
         }
+    }
+
+    public String describe() throws Exception {
+        String result = "";
+        result.concat(this.getName() + "\n");
+        result.concat(this.getBasePower() + "\n");
+        result.concat(this.getMasteryLevel() + "\n");
+        for (int i = 0; i < this.compatibleElements.size(); i++) {
+            result.concat("SKILLELMT\n");
+            result.concat(this.getNthCompatibleElement(i) + "\n");
+        }
+        return result;
     }
 }
 

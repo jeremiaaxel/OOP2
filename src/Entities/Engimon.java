@@ -4,8 +4,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 
-public abstract class Engimon extends MapObject{
+public abstract class Engimon extends MapObject implements Serializable {
     protected char engimonSymbol;
     protected String engimonName;
     protected String engimonSpesies;
@@ -22,7 +23,7 @@ public abstract class Engimon extends MapObject{
     protected String messageUnik;
     protected final int maxCumExp = 800;
     public boolean isdead = false;
-    private GradientPaint paint;
+    private transient GradientPaint paint;
 
     protected boolean wild = true;
 
@@ -47,6 +48,30 @@ public abstract class Engimon extends MapObject{
         this.setTilePosition(position);
         loadImg();
     }
+
+    public String describe() throws Exception {
+        String result = "";
+        result.concat("ENGIMONPARENT\n");
+        result.concat(this.getEngimonParent().describe());
+        result.concat("ENGIMON\n");
+        result.concat(this.getEngimonSymbol() + "\n");
+        result.concat(this.getEngimonName() + "\n");
+        result.concat(this.getEngimonSpesies() + "\n");
+        result.concat(this.getEngimonLevel() + "\n");
+        result.concat(this.getEngimonExp() + "\n");
+        for (int j = 0; j < this.getNumberOfSkill(); j++) {
+            result.concat("ENGIMONSKILL " + j + "\n");
+            result.concat(this.getNthEngimonSkill(j).describe());
+        }
+        for (int i = 0; i < this.getNumberOfElement(); i++) {
+            result.concat("ENGIMONELMT " + i + "\n");
+            result.concat(this.getNthEngimonElement(i) + "\n");
+        }
+        result.concat(this.getCurrentPosition().getAbsis() + "," + this.getCurrentPosition().getOrdinat() + "\n");
+        result.concat(this.getEngimonLife() + "\n");
+        return result;
+    }
+    public Parent getEngimonParent() { return this.engimonParent; }
 
     public void loadImg(){
         try {
@@ -231,16 +256,16 @@ public abstract class Engimon extends MapObject{
         }
 
         if (wild){
-            System.out.println("map :" + currentPosition.getOrdinat() +"," + currentPosition.getAbsis());
+            /*System.out.println("map :" + currentPosition.getOrdinat() +"," + currentPosition.getAbsis());
             System.out.println("map :" + getMapRowFromOrd(ytemp) +"," + getMapColFromAbsis(xtemp));
             System.out.println("type :" + map.getTile(getMapRowFromOrd(ytemp),
                     getMapColFromAbsis(xtemp)).getType());
             displayAllEngimonElement();
             System.out.println(isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
-                    getMapColFromAbsis(xtemp)).getType()));
+                    getMapColFromAbsis(xtemp)).getType()));*/
             if (isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
                     getMapColFromAbsis(xtemp)).getType())){
-                System.out.println("masuk");
+                // System.out.println("masuk");
                 setTilePosition(map.getTile(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)));
             };
         } else {

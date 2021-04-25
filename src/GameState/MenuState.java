@@ -38,9 +38,13 @@ public class MenuState extends GameState{
         }
     }
 
-    public void init(){}
+    public void init(){
+        // None
+    }
 
-    public void update(){}
+    public void update(){
+        // None
+    }
 
     public void draw(Graphics2D gr){
         // add background-image
@@ -70,7 +74,7 @@ public class MenuState extends GameState{
                 gameStateManager.setGameStates(GameStateManager.NEWGAME);
                 break;
             case 1 : // load game
-//                gameStateManager.setGameStates(GameStateManager.LOADGAME);
+                gameStateManager.setGameStates(GameStateManager.LOADGAME);
                 break;
             case 2 : // help
                 break;

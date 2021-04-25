@@ -5,14 +5,14 @@ import Game.GamePanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
-public class PlayingState extends GameState{
+public class PlayingState extends GameState {
 
     private Map map = new Map();
     private Player player;
@@ -27,7 +27,6 @@ public class PlayingState extends GameState{
         this.gameStateManager = gameStateManager;
         this.newgame = newgame;
         this.startTime = System.nanoTime();
-        init();
     }
 
     private void print(Object obj, Object end) {
@@ -38,27 +37,97 @@ public class PlayingState extends GameState{
         System.out.println(obj);
     }
 
-    public void init(){
-        if (newgame){
-            try {
-                String map_text = map.parse("data/map.txt");
-                this.map = new Map(16, 20, map_text);
-                this.map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
-                player = new Player("New Player", map); // NANTI MINTA NAMA DULU
-                wildEngimon = new WildEngimon(10,map);
-            } catch (IOException e) {
-                e.printStackTrace();
+    @Override
+    public synchronized void init(){
+
+        try {
+            String map_text = map.parse("data/map.txt");
+            this.map = new Map(16, 20, map_text);
+            this.map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
+
+            if (newgame) {
+                this.player = new Player("New Player", map); // NANTI MINTA NAMA DULU
+                this.wildEngimon = new WildEngimon(10,map);
+                playerInit();
+            } else {
+                playerLoad();
+
+                // load resources
+                for (int i = 0; i < wildEngimon.getNumberOfWildEngimon(); i++) {
+                    wildEngimon.getNthEngimon(i).loadImg();
+                }
+                player.getActiveEngimon().loadImg();
             }
-        } else{
-            load();
+
+            player.loadSprites();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+     public synchronized void playerInit(){
+        Engimon eng1 = new Blaziken("my blaziken", new Parent(), player.getPlayerPosition(),map);
+        Engimon eng2 = new Ampharos("my ampharos", new Parent(), player.getPlayerPosition(),map);
+        Engimon eng3 = new Aggron("my aggron", new Parent(), player.getPlayerPosition(),map);
+        Engimon eng4 = new Araquanid("my araquanid", new Parent(),player.getPlayerPosition(),map);
+        Engimon eng5 = new Eiscue("my eiscue", new Parent(),player.getPlayerPosition(),map);
+        this.player.addEngimon(eng1);
+        this.player.addEngimon(eng2);
+        this.player.addEngimon(eng3);
+        this.player.addEngimon(eng4);
+        this.player.addEngimon(eng5);
+        this.player.switchActiveEngimon(0);
+    }
+
+    public synchronized void playerLoad(){
+        String dataPath = "data";
+        print("Nama file penyimpanan : ", "");
+        Scanner scanner = new Scanner(System.in);
+//        String dirpath = scanner.nextLine();
+        String dirpath = "test1";
+        dataPath = dataPath.concat("/"+dirpath);
+        try {
+            // Make player load
+            FileInputStream fileIn = new FileInputStream(dataPath.concat("/" + "player.txt"));
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            this.player = (Player) in.readObject();
+            in.close();
+            fileIn.close();
+
+            print("Player done");
+
+            // Make wild engimon load
+            fileIn = new FileInputStream(dataPath.concat("/" + "wildengimons.txt"));
+            in = new ObjectInputStream(fileIn);
+            wildEngimon = (WildEngimon) in.readObject();
+            in.close();
+            fileIn.close();
+            print("Wild Engimon done");
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-    public void load(){
-        print("Belum ada");
-    }
-
-    public void update(){
+    public synchronized void update(){
+        while (player == null) {
+            System.out.println("Something went wrong player");
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        while (wildEngimon == null) {
+            System.out.println("Something went wrong wild engimon");
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         player.update();
         wildEngimon.update(player);
         if (wildEngimon.getNumberOfWildEngimon() == 0){
@@ -68,7 +137,7 @@ public class PlayingState extends GameState{
         spawnRandowmWildEngimon();
     }
 
-    public void keyPressed(int key){
+    public synchronized void keyPressed(int key){
         switch (key) {
             case KeyEvent.VK_SPACE:
 //                doBattle();
@@ -87,6 +156,8 @@ public class PlayingState extends GameState{
                 break;
             case KeyEvent.VK_S:
                 savegame();
+                print(player.getPlayerPosition().getAbsis() + ", " + player.getPlayerPosition().getOrdinat());
+                commandQuit();
                 break;
             case KeyEvent.VK_1:
 //                commandPlayer1
@@ -107,13 +178,17 @@ public class PlayingState extends GameState{
 //                commandPlayer5
                 break;
             case KeyEvent.VK_ESCAPE:
-//                commandQuit
+                commandQuit();
             default:
                 break;
         }
     }
 
-    public void spawnRandowmWildEngimon(){
+    public synchronized void commandQuit() {
+        this.gameStateManager.setGameStates(GameStateManager.MENUSTATE);
+    }
+
+    public synchronized void spawnRandowmWildEngimon(){
         long elapsed = (System.nanoTime() - startTime)/ 1000000;
         if (elapsed > spawnDelay) {
             Random rand = new Random(new Date().getTime());
@@ -144,7 +219,7 @@ public class PlayingState extends GameState{
         }
     }
 
-    public void keyReleased(int key){
+    public synchronized void keyReleased(int key){
         switch (key) {
             case KeyEvent.VK_UP:
                 this.player.setUp(false);
@@ -163,34 +238,52 @@ public class PlayingState extends GameState{
         }
     }
 
-    public void draw(Graphics2D g){
-        // clear screen
-        g.setColor(Color.BLACK);
-        int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
-        int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
-        g.fillRect((map.getNumberOfColumn()-2) * map.getTilesize(),0,panelWidth, panelHeight);
+    public synchronized void draw(Graphics2D g){
+        if (player == null) {
+            print("Something went wrong [draw]");
+        } else {
+            // clear screen
+            g.setColor(Color.BLACK);
+            int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
+            int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
+            g.fillRect((map.getNumberOfColumn()-2) * map.getTilesize(),0,panelWidth, panelHeight);
 
-        // draw map
-        map.drawMap(g);
-        player.draw(g);
-        wildEngimon.draw(g);
+            // draw map
+            map.drawMap(g);
+            player.draw(g);
+            wildEngimon.draw(g);
+        }
     }
 
-    public void savegame() {
+    public synchronized void savegame() {
+        String dataPath = "data";
         print("Nama file penyimpanan : ", "");
         Scanner scanner = new Scanner(System.in);
-        String filepath = scanner.nextLine();
-        String dataPath = "data/";
+//        String dirpath = scanner.nextLine();
+        String dirpath = "test1";
+        dataPath = dataPath.concat('/' + dirpath);
+        print(dataPath);
 
         try {
-            File saveFile = new File(dataPath+filepath+".txt");
-            boolean isExist = saveFile.createNewFile();
-            FileOutputStream outFile = new FileOutputStream(saveFile, false);
+            // Make folder
+            File folderOut = new File(dataPath);
+            boolean dirCreated = folderOut.mkdir();
 
-            // nyimpen data-data yang perlu.
-            /* DATA-DATA YANG PERLU DISAVE?
-            https://www.tutorialspoint.com/java/java_serialization.htm
-            * */
+            // Make player save
+            FileOutputStream fileOut = new FileOutputStream(dataPath.concat("/" + "player.txt"));
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(player);
+            out.close();
+            fileOut.close();
+            print("Player done");
+
+            // Make wild engimon save
+            fileOut = new FileOutputStream(dataPath.concat("/" + "wildengimons.txt"));
+            out = new ObjectOutputStream(fileOut);
+            out.writeObject(wildEngimon);
+            out.close();
+            fileOut.close();
+            print("Wild Engimons done");
 
         } catch (IOException e) {
             e.printStackTrace();

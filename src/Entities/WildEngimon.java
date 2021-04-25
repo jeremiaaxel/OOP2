@@ -1,9 +1,11 @@
 package Entities;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
+import java.util.List;
 
-public class WildEngimon{
+public class WildEngimon implements Serializable {
     private ArrayList<Engimon> wildEngimonList;
     private int capacity;
     private Map map;
@@ -14,8 +16,8 @@ public class WildEngimon{
     private long levelUpStartTime;
 
     public WildEngimon(Map map){
-        capacity = 12;
         wildEngimonList = new ArrayList<>();
+        capacity = 12;
         this.map = map;
         delayToMove = 800;
         delayToLevelUp = 5000;
@@ -23,12 +25,21 @@ public class WildEngimon{
     }
 
     public WildEngimon(int capacity, Map map){
-        this.capacity = capacity;
         wildEngimonList = new ArrayList<>();
+        this.capacity = capacity;
         this.map = map;
         delayToMove = 800;
         delayToLevelUp = 10000;
         init();
+    }
+
+    public WildEngimon(WildEngimon wildEngimonin, Map map) {
+        wildEngimonList = new ArrayList<>();
+        this.capacity = wildEngimonin.capacity;
+        this.map = map;
+        delayToMove = 800;
+        delayToLevelUp = 10000;
+        init(wildEngimonin.wildEngimonList);
     }
 
     public void init(){
@@ -42,6 +53,14 @@ public class WildEngimon{
         addWildEngimon(wild3);
         addWildEngimon(wild4);
         addWildEngimon(wild5);
+        moveStartTime = System.nanoTime();
+        levelUpStartTime = System.nanoTime();
+    }
+
+    public void init(List<Engimon> engimons) {
+        for (int i = 0; i < engimons.size(); i++) {
+            this.addWildEngimon(engimons.get(i));
+        }
         moveStartTime = System.nanoTime();
         levelUpStartTime = System.nanoTime();
     }

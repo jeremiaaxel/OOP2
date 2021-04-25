@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.ImageIO;
 
-public class Map {
+public class Map implements Serializable {
     private Tile[][] map;
     private int row_size;
     private int col_size;

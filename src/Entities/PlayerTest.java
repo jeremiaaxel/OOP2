@@ -49,7 +49,7 @@ public class PlayerTest {
 
     @Test
     void testSetAndGetPlayerPosition() {
-        p.setPlayerPosition(p.map, p.map.getTile(5, 5));
+        p.setPlayerPosition(p.map.getTile(5, 5));
         println(p.getPlayerPosition().getAbsis() + ", " + p.getPlayerPosition().getOrdinat());
         assert p.getPlayerPosition().getAbsis() == 5;
         assert p.getPlayerPosition().getOrdinat() == 5;
@@ -57,7 +57,7 @@ public class PlayerTest {
 
     @Test
     void testMove() {
-        p.setPlayerPosition(p.map, p.map.getTile(5, 5));
+        p.setPlayerPosition(p.map.getTile(5, 5));
         p.move(p.map, 'w');
         assert p.getPlayerPosition().getAbsis() == 5 && p.getPlayerPosition().getOrdinat() == 4;
         p.move(p.map, 'a');
@@ -92,7 +92,7 @@ public class PlayerTest {
     void testGetActiveEngimon() {
         Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
-        p.switchActiveEngimon(p.map, 1);
+        p.switchActiveEngimon(1);
         assert p.getActiveEngimon().equals(eng1);
         println(p.getActiveEngimon().getEngimonName());
     }
@@ -109,7 +109,7 @@ public class PlayerTest {
     void testSetActiveEngimonPosition() {
         Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
-        p.switchActiveEngimon(p.map, 1);
+        p.switchActiveEngimon(1);
         Tile tile = new Tile();
         tile.setAbsis(10);
         tile.setOrdinat(13);
@@ -176,7 +176,7 @@ public class PlayerTest {
     void testUseSkillItem() {
         addMoreEngimons();
         addMoreSkill();
-        p.switchActiveEngimon(map, 0);
+        p.switchActiveEngimon(0);
         assert p.getOwnedSkillItemSize() == 3;
         p.getActiveEngimon().displayEngimonInfo();
         println("");

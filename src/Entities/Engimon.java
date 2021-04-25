@@ -20,11 +20,10 @@ public abstract class Engimon extends MapObject{
     protected int numberOfSkill;
     protected int numberOfElement;
     protected String messageUnik;
-    protected final int maxCumExp = 500;
+    protected final int maxCumExp = 800;
     public boolean isdead = false;
-    protected BufferedImage image;
 
-    protected boolean wild = false;
+    protected boolean wild = true;
 
     public Engimon(char engimonSymbol, String engimonName, String engimonSpesies, Parent parent, Tile position,Map map){
         super(map);
@@ -49,7 +48,12 @@ public abstract class Engimon extends MapObject{
         try {
             animation = new Animation();
             BufferedImage[] b = new BufferedImage[1];
-            b[0] = ImageIO.read(new FileInputStream("resources/engimon.gif"));
+            if (wild) {
+                b[0] = ImageIO.read(new FileInputStream("resources/engimon.gif"));
+            } else{
+                b[0] = ImageIO.read(new FileInputStream("resources/player-eng.gif"));
+            }
+            animation.setDelay(500);
             animation.setFrames(b);
         } catch (Exception e){
             e.printStackTrace();
@@ -57,7 +61,10 @@ public abstract class Engimon extends MapObject{
     }
 
     public void setWild(boolean wild){
-        this.wild = wild;
+        if (this.wild != wild){
+            this.wild = wild;
+            loadImg();
+        }
     }
 
     // getter
@@ -127,6 +134,8 @@ public abstract class Engimon extends MapObject{
         this.messageUnik = msg;
     }
     public void setTilePosition(Tile t){
+        map.setTileOcc(currentPosition,map.NO_OCCUPIER);
+        map.setTileOcc(t.getOrdinat(),t.getAbsis(),map.OCCUPIED);
         setPositionByMap(t.getAbsis(),t.getOrdinat());
         this.currentPosition = t;
     }
@@ -201,16 +210,12 @@ public abstract class Engimon extends MapObject{
     public void move(){
         moveDistance = this.map.getTilesize();
         if (left){
-            System.out.println("left");
             xtemp -= moveDistance;
         } else if (right){
-            System.out.println("right");
             xtemp += moveDistance;
         } else if (up){
-            System.out.println("up");
             ytemp -= moveDistance;
         }  else if (down){
-            System.out.println("down");
             ytemp += moveDistance;
         }
 
@@ -232,10 +237,10 @@ public abstract class Engimon extends MapObject{
             if (isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
                     getMapColFromAbsis(xtemp)).getType())){
                 System.out.println("masuk");
-                setPosition(xtemp,ytemp);
+                setTilePosition(map.getTile(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)));
             };
         } else {
-            setPosition(xtemp,ytemp);
+            setTilePosition(map.getTile(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)));
         }
     }
 
@@ -269,9 +274,9 @@ public abstract class Engimon extends MapObject{
 
     public void displayEngimonInfo(){
         System.out.println("Name                   : " + getEngimonName());
-        System.out.println("Parent                 : "); engimonParent.displayInfo();
-        System.out.println("Skill                  : "); displayAllEngimonSkillName();;
-        System.out.println("Element                : "); displayAllEngimonElement();
+        System.out.print("Parent                 : "); engimonParent.displayInfo();
+        System.out.print("Skill                  : "); displayAllEngimonSkillName();;
+        System.out.print("Element                : "); displayAllEngimonElement();System.out.println();
         System.out.println("Level                  : " + getEngimonLevel());
         System.out.println("Experience             : " + getEngimonExp());
         System.out.println("Cumulative Experience  : " + getCumulativeExp());

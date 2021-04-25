@@ -45,6 +45,7 @@ public class Player extends MapObject implements Serializable {
     private static final int WALKING_LEFT = 3;
     private static final int WALKING_RIGHT = 4;
 
+    private boolean vertical;
 
     /* ************ PLAYER ************ */
     public Player(String name, Entities.Map map) {
@@ -63,6 +64,7 @@ public class Player extends MapObject implements Serializable {
 
         init();
     }
+
 
     public void loadSprites(){
         try
@@ -120,17 +122,10 @@ public class Player extends MapObject implements Serializable {
         addEngimon(eng5);
         setActiveEngimonId(0);
         setActiveEngimonPosition(map.getTile(5,8));
+        vertical = false; //active eng dan player segaris horizontal
     }
 
     public Tile getPlayerPosition() { return this.currentPosition; }
-
-    public void setPlayerPosition(Entities.Map map, Tile tile) {
-//         set occupier in map
-        map.setTileOcc(this.currentPosition, 'P');
-        
-//         set currentPosition jadi tile
-        this.currentPosition = map.getTile(tile);
-    }
 
     public void showCommands() {
         println("commandnya apa weh");
@@ -140,6 +135,7 @@ public class Player extends MapObject implements Serializable {
     public void addEngimon(Engimon eng) {
         try {
             eng.setSymbol('X');
+            eng.setWild(false);
             this.ownedEngimon.add(eng);
         } catch (Exception e) {
             println(e.getMessage());
@@ -163,11 +159,13 @@ public class Player extends MapObject implements Serializable {
 
     public Engimon getEngimon(int id) { return this.ownedEngimon.getItem(id); }
 
-    public void switchActiveEngimon(Entities.Map map, int new_eng_id) {
-        Tile oldActiveEngTile = new Tile();
-        oldActiveEngTile.set(this.getActiveEngimon().getCurrentPosition());
-        this.setActiveEngimonId(new_eng_id);
-        this.getActiveEngimon().setTilePosition(oldActiveEngTile);
+    public void switchActiveEngimon(int new_eng_id) {
+        if (new_eng_id != activeEngimonId){
+            Tile oldActiveEngTile = new Tile();
+            oldActiveEngTile.set(this.getActiveEngimon().getCurrentPosition());
+            this.setActiveEngimonId(new_eng_id);
+            this.getActiveEngimon().setTilePosition(oldActiveEngTile);
+        }
     }
 
     private void setActiveEngimonId(int id) {
@@ -335,35 +333,89 @@ public class Player extends MapObject implements Serializable {
         if (left){
             xtemp -= moveDistance;
             ytemp = y;
+            getActiveEngimon().xtemp = x + width;
+            if (vertical){
+                getActiveEngimon().ytemp = ytemp;
+                vertical = false;
+            }
         } else if (right){
             xtemp += moveDistance;
             ytemp = y;
+            getActiveEngimon().xtemp = x - getActiveEngimon().width;
+            if (vertical){
+                getActiveEngimon().ytemp = ytemp;
+                vertical = false;
+            }
         } else if (up){
             xtemp = x;
             ytemp -= moveDistance;
+            getActiveEngimon().ytemp = y + width;
+            if (!vertical){
+                getActiveEngimon().xtemp = xtemp;
+                vertical = true;
+            }
         } else if (down){
             xtemp = x;
             ytemp += moveDistance;
-        } else {
-            xtemp = x;
-            ytemp = y;
+            getActiveEngimon().ytemp = y - getActiveEngimon().height;
+            if (!vertical){
+                getActiveEngimon().xtemp = xtemp;
+                vertical = true;
+            }
         }
 
-        if (xtemp<0 || ytemp <0
-                || ytemp >= map.getTilesize()*(map.getNumberOfRow()-3)
-                || xtemp >= map.getTilesize()*(map.getNumberOfColumn()-3)){
+        if (isOutOfMap(xtemp,ytemp)){
             xtemp = x;
             ytemp = y;
+            getActiveEngimon().xtemp = getActiveEngimon().x;
+            getActiveEngimon().ytemp = getActiveEngimon().y;
         }
+        if (isOutOfMap(getActiveEngimon().xtemp,getActiveEngimon().ytemp)){
+            getActiveEngimon().xtemp = xtemp;
+            getActiveEngimon().ytemp = ytemp;
+        }
+    }
+
+    public boolean isOutOfMap(double x, double y){
+        return x<0 || y <0
+                || y >= map.getTilesize()*(map.getNumberOfRow()-3)
+                || x >= map.getTilesize()*(map.getNumberOfColumn()-3);
+    }
+
+    public void setPlayerPosition(Tile tile){
+        map.setTileOcc(tile,map.OCCUPIED);
+        map.setTileOcc(currentPosition,map.NO_OCCUPIER);
+        currentPosition = tile;
+    }
+
+    public void updatePosition(double xplayer, double yplayer, double xactiveEng, double yactiveEng){
+        setPlayerPosition(map.getTile(getMapRowFromOrd(yplayer),getMapColFromAbsis(xplayer)));
+        setPosition(xplayer,yplayer);
+        setActiveEngimonPosition(map.getTile(getMapRowFromOrd(yactiveEng),getMapColFromAbsis(xactiveEng)));
+        getActiveEngimon().setPosition(xactiveEng,yactiveEng);
     }
 
     public void update(){
         // update semua engimon player
+        ArrayList<Engimon> engToDelete = new ArrayList<>();
+        Engimon eng;
+        for (int i = 0; i < getOwnedEngimonSize(); i++){
+            eng = getEngimon(i);
+            eng.update();
+            if (eng.isdead){
+                engToDelete.add(eng);
+            }
+        }
+        for (Engimon e: engToDelete) {
+            eng = removeEngimon(e);
+        }
 
         // update position
         nextPosition();
         handleCollision();
-        setPosition(xtemp,ytemp);
+
+        // update position
+        updatePosition(xtemp,ytemp,getActiveEngimon().xtemp,getActiveEngimon().ytemp);
 
         // set animation
         if (currentAction == IDLE && (left || down || right || up)){
@@ -394,6 +446,7 @@ public class Player extends MapObject implements Serializable {
     }
 
     public void draw(Graphics2D g){
+        // draw player
         if (left || right || up || down){
             g.drawImage(animation.getImage(),
                     (int) (x),
@@ -406,7 +459,8 @@ public class Player extends MapObject implements Serializable {
             g.drawImage(animation.getImage(),
                     (int) x, (int) y, width, height, null);
         }
-        g.drawImage(getActiveEngimon().image,(int) getActiveEngimon().x,
+        // draw active engimon
+        g.drawImage(getActiveEngimon().animation.getImage(), (int) getActiveEngimon().x,
                 (int) getActiveEngimon().y,
                 getActiveEngimon().width,getActiveEngimon().height, null);
     }
@@ -444,7 +498,7 @@ public class Player extends MapObject implements Serializable {
         // newTile -> playerPos
         newTile.setOccupier('P');
         map.setTileOcc(newTile.getOrdinat(), newTile.getAbsis(), 'P');
-        this.setPlayerPosition(map, newTile);
+        this.setPlayerPosition(newTile);
     }
 
     public void handleCollision(){
@@ -453,6 +507,8 @@ public class Player extends MapObject implements Serializable {
             System.out.println("occupied : " + getMapRowFromOrd(ytemp)+","+getMapColFromAbsis(xtemp));
             xtemp = x;
             ytemp = y;
+            getActiveEngimon().xtemp = getActiveEngimon().x;
+            getActiveEngimon().ytemp = getActiveEngimon().y;
         }
     }
 }

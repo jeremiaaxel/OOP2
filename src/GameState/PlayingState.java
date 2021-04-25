@@ -95,7 +95,10 @@ public class PlayingState extends GameState{
 //                commandPlayer12
                 break;
             case KeyEvent.VK_3:
-//                commandPlayer3
+                //switch active engimon
+                int test = 2;
+                player.switchActiveEngimon(2);
+                player.getActiveEngimon().displayEngimonInfo();
                 break;
             case KeyEvent.VK_4:
 //                commandPlayer4

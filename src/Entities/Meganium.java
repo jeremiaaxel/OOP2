@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class Meganium extends Engimon{
     
-    public Meganium(String name, Parent parent, Tile position){
-        super('n',name,"Meganium",parent,position);
+    public Meganium(String name, Parent parent, Tile position,Map map){
+        super('n',name,"Meganium",parent,position,map);
         super.addElement("Water");
         super.addElement("Ground");
         try {

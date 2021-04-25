@@ -30,49 +30,49 @@ public class Breeding extends Exception{
                     String nama = keyboard.nextLine();
 
                     if (e1.getEngimonSpesies() == "Aggron"){
-                        Engimon eChild = new Aggron(nama, parent, childPosition);
+                        Engimon eChild = new Aggron(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Ampharos"){
-                        Engimon eChild = new Ampharos(nama, parent, childPosition);
+                        Engimon eChild = new Ampharos(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Araquanid"){
-                        Engimon eChild = new Araquanid(nama, parent, childPosition);
+                        Engimon eChild = new Araquanid(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Blaziken"){
-                        Engimon eChild = new Blaziken(nama, parent, childPosition);
+                        Engimon eChild = new Blaziken(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Eiscue"){
-                        Engimon eChild = new Eiscue(nama, parent, childPosition);
+                        Engimon eChild = new Eiscue(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Loceam"){
-                        Engimon eChild = new Loceam(nama, parent, childPosition);
+                        Engimon eChild = new Loceam(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Megalapras"){
-                        Engimon eChild = new Megalapras(nama, parent, childPosition);
+                        Engimon eChild = new Megalapras(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e1.getEngimonSpesies() == "Meganium"){
-                        Engimon eChild = new Meganium(nama, parent, childPosition);
+                        Engimon eChild = new Meganium(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
@@ -92,49 +92,49 @@ public class Breeding extends Exception{
                     String nama = keyboard.nextLine();
 
                     if (e2.getEngimonSpesies() == "Aggron"){
-                        Engimon eChild = new Aggron(nama, parent, childPosition);
+                        Engimon eChild = new Aggron(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Ampharos"){
-                        Engimon eChild = new Ampharos(nama, parent, childPosition);
+                        Engimon eChild = new Ampharos(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Araquanid"){
-                        Engimon eChild = new Araquanid(nama, parent, childPosition);
+                        Engimon eChild = new Araquanid(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Blaziken"){
-                        Engimon eChild = new Blaziken(nama, parent, childPosition);
+                        Engimon eChild = new Blaziken(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Eiscue"){
-                        Engimon eChild = new Eiscue(nama, parent, childPosition);
+                        Engimon eChild = new Eiscue(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Loceam"){
-                        Engimon eChild = new Loceam(nama, parent, childPosition);
+                        Engimon eChild = new Loceam(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Megalapras"){
-                        Engimon eChild = new Megalapras(nama, parent, childPosition);
+                        Engimon eChild = new Megalapras(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
                     }
                     else if (e2.getEngimonSpesies() == "Meganium"){
-                        Engimon eChild = new Meganium(nama, parent, childPosition);
+                        Engimon eChild = new Meganium(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
                         eChild.displayEngimonInfo();
@@ -156,7 +156,7 @@ public class Breeding extends Exception{
                         //Engimon eChild;
 
                         if (((e1.getNthEngimonElement(1) == "Fire") && (e2.getNthEngimonElement(1) == "Electric")) || ((e2.getNthEngimonElement(1) == "Fire") && (e1.getNthEngimonElement(1) == "Electric"))){
-                            Engimon eChild = new Loceam(nama, parent, childPosition);
+                            Engimon eChild = new Loceam(nama, parent, childPosition, e1.getMap());
                             this.numberOfSkill++;
                             addSkillWithPrior(e1, e2, eChild);
                             //player.addEngimon(eChild);
@@ -164,7 +164,7 @@ public class Breeding extends Exception{
                             eChild.displayEngimonInfo();
                         }
                         else if (((e1.getNthEngimonElement(1) == "Water") && (e2.getNthEngimonElement(1) == "Ice")) || ((e2.getNthEngimonElement(1) == "Water") && (e1.getNthEngimonElement(1) == "Ice"))){
-                            Engimon eChild = new Megalapras(nama, parent, childPosition);
+                            Engimon eChild = new Megalapras(nama, parent, childPosition, e1.getMap());
                             this.numberOfSkill++;
                             addSkillWithPrior(e1, e2, eChild);
                             //player.addEngimon(eChild);
@@ -172,7 +172,7 @@ public class Breeding extends Exception{
                             eChild.displayEngimonInfo();
                         }
                         else if (((e1.getNthEngimonElement(1) == "Water") && (e2.getNthEngimonElement(1) == "Ground")) || ((e2.getNthEngimonElement(1) == "Water") && (e1.getNthEngimonElement(1) == "Ground"))){
-                            Engimon eChild = new Meganium(nama, parent, childPosition);
+                            Engimon eChild = new Meganium(nama, parent, childPosition, e1.getMap());
                             this.numberOfSkill++;
                             addSkillWithPrior(e1, e2, eChild);
                             //player.addEngimon(eChild);
@@ -366,6 +366,9 @@ public class Breeding extends Exception{
     }
 
     public static void main(String[] args) throws Exception{
+        Map map = new Map();
+        String map_text = map.parse("data/map.txt");
+        map = new Map(16, 20, map_text);
         Parent parent1 = new Parent("A1", "Aggron", "A2", "Aggron");
         Parent parent2 = new Parent("B1", "Ampharos", "B2", "Ampharos");
         Parent parent3 = new Parent("C1", "Araquanid", "C2", "Araquanid");
@@ -375,15 +378,15 @@ public class Breeding extends Exception{
         Parent parent7 = new Parent("G1", "Megalapras", "G2", "Megalapras");
         Parent parent8 = new Parent("H1", "Meganium", "H2", "Meganium");
         Tile position = new Tile();
-        Engimon e1 = new Aggron("Satu", parent1, position);
-        Engimon e2 = new Ampharos("Dua", parent2, position);
-        Engimon e3 = new Araquanid("Tiga", parent3, position);
-        Engimon e4 = new Blaziken("Empat", parent4, position);
-        Engimon e5 = new Eiscue("Lima", parent5, position);
-        Engimon e6 = new Loceam("Enam", parent6, position);
-        Engimon e7 = new Megalapras("Tujuh", parent7, position);
-        Engimon e8 = new Meganium("Delapan", parent8, position);
-        Engimon e9 = new Aggron("Sembilan", parent1, position);
+        Engimon e1 = new Aggron("Satu", parent1, position,map );
+        Engimon e2 = new Ampharos("Dua", parent2, position,map);
+        Engimon e3 = new Araquanid("Tiga", parent3, position,map);
+        Engimon e4 = new Blaziken("Empat", parent4, position,map);
+        Engimon e5 = new Eiscue("Lima", parent5, position,map);
+        Engimon e6 = new Loceam("Enam", parent6, position,map);
+        Engimon e7 = new Megalapras("Tujuh", parent7, position,map);
+        Engimon e8 = new Meganium("Delapan", parent8, position,map);
+        Engimon e9 = new Aggron("Sembilan", parent1, position,map);
         
         e1.setLevel(5);
         e2.setLevel(5);

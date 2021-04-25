@@ -41,6 +41,9 @@ public class MapObject {
         height = map.getTilesize();
     }
 
+    public Map getMap(){
+        return map;
+    }
     protected int getMapColFromAbsis(double x){
         return (int) (x/map.getTilesize() + 1);
     }

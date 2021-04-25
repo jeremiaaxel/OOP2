@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class Megalapras extends Engimon{
     
-    public Megalapras(String name, Parent parent, Tile position){
-        super('s',name,"Megalapras",parent,position);
+    public Megalapras(String name, Parent parent, Tile position,Map map){
+        super('s',name,"Megalapras",parent,position,map);
         super.addElement("Water");
         super.addElement("Ice");
         try {

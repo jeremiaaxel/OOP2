@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class Araquanid extends Engimon{
     
-    public Araquanid(String name, Parent parent, Tile position){
-        super('w',name,"Araquanid",parent,position);
+    public Araquanid(String name, Parent parent, Tile position, Map map){
+        super('w',name,"Araquanid",parent,position,map);
         super.addElement("Water");
         try {
             super.addSkill(new Liquidation());

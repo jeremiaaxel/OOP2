@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class Ampharos extends Engimon{
     
-    public Ampharos(String name, Parent parent, Tile position){
-        super('e',name,"Ampharos",parent,position);
+    public Ampharos(String name, Parent parent, Tile position, Map map){
+        super('e',name,"Ampharos",parent,position,map);
         super.addElement("Electric");
         try {
             super.addSkill(new ParabolicCharge());

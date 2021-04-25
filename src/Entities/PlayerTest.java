@@ -15,9 +15,9 @@ public class PlayerTest {
     }
 
     public void addMoreEngimons() {
-        p.addEngimon(new Ampharos("Ampharos", parent, p.getPlayerPosition()));
-        p.addEngimon(new Eiscue("Eiscue", parent, p.getPlayerPosition()));
-        p.addEngimon(new Araquanid("Ara ara~", parent, p.getPlayerPosition()));
+        p.addEngimon(new Ampharos("Ampharos", parent, p.getPlayerPosition(),map));
+        p.addEngimon(new Eiscue("Eiscue", parent, p.getPlayerPosition(),map));
+        p.addEngimon(new Araquanid("Ara ara~", parent, p.getPlayerPosition(),map));
     }
 
     public void addMoreSkill() {
@@ -42,7 +42,7 @@ public class PlayerTest {
         p = new Player("Test", map);
 
         Parent parent = new Parent();
-        Engimon eng1 = new Aggron("Aggron", parent, p.getPlayerPosition());
+        Engimon eng1 = new Aggron("Aggron", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
 
     }
@@ -90,7 +90,7 @@ public class PlayerTest {
 
     @Test
     void testGetActiveEngimon() {
-        Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition());
+        Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
         p.switchActiveEngimon(p.map, 1);
         assert p.getActiveEngimon().equals(eng1);
@@ -99,7 +99,7 @@ public class PlayerTest {
 
     @Test
     void testGetEngimon() {
-        Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition());
+        Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
         assert p.getEngimon(1).equals(eng1);
         println(p.getActiveEngimon().getEngimonName());
@@ -107,13 +107,13 @@ public class PlayerTest {
 
     @Test
     void testSetActiveEngimonPosition() {
-        Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition());
+        Engimon eng1 = new Blaziken("Blaz", parent, p.getPlayerPosition(),map);
         p.addEngimon(eng1);
         p.switchActiveEngimon(p.map, 1);
         Tile tile = new Tile();
         tile.setAbsis(10);
         tile.setOrdinat(13);
-        p.setActiveEngimonPosition(p.map, tile);
+        p.setActiveEngimonPosition(tile);
         assert p.getActiveEngimon().getCurrentPosition().getAbsis() == 10;
         assert p.getActiveEngimon().getCurrentPosition().getOrdinat() == 13;
         println(p.getActiveEngimon().getCurrentPosition().getAbsis() + ", " + p.getActiveEngimon().getCurrentPosition().getOrdinat());

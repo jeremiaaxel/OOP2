@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class Loceam extends Engimon{
     
-    public Loceam(String name, Parent parent, Tile position){
-        super('l',name,"Loceam",parent,position);
+    public Loceam(String name, Parent parent, Tile position, Map map){
+        super('l',name,"Loceam",parent,position, map);
         super.addElement("Fire");
         super.addElement("Electric");
         try {

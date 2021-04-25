@@ -119,25 +119,22 @@ public class PlayingState extends GameState{
             switch (random_speciesid)
             {
                 case 0:
-                    new_eng = new Aggron("Wild Aggron",new Parent(),map.getEmptyTileInRowNWithType(3,'g'));
+                    new_eng = new Aggron("Wild Aggron",new Parent(),map.getEmptyTileInRowNWithType(3,'g'),map);
                     break;
                 case 1:
-                    new_eng = new Ampharos("Wild Ampharos",new Parent(),map.getEmptyTileInRowNWithType(5,'g'));
+                    new_eng = new Ampharos("Wild Ampharos",new Parent(),map.getEmptyTileInRowNWithType(5,'g'),map);
                     break;
                 case 2:
-                    new_eng = new Araquanid("Wild Araquanid",new Parent(),map.getEmptyTileInRowNWithType(7,'s'));
+                    new_eng = new Araquanid("Wild Araquanid",new Parent(),map.getEmptyTileInRowNWithType(7,'s'),map);
                     break;
                 case 3:
-                    new_eng = new Blaziken("Wild Blaziken",new Parent(),map.getEmptyTileInRowNWithType(0,'m'));
+                    new_eng = new Blaziken("Wild Blaziken",new Parent(),map.getEmptyTileInRowNWithType(0,'m'),map);
                     break;
                 default:
-                    new_eng = new Eiscue("Wild Eiscue",new Parent(),map.getEmptyTileInRowNWithType(7,'t'));
+                    new_eng = new Eiscue("Wild Eiscue",new Parent(),map.getEmptyTileInRowNWithType(10,'t'),map);
             };
-            new_eng.setMap(map);
-            if (true)
-//            if (new_eng.isTileCompatible(new_eng.getCurrentPosition()))
+            if (new_eng.isTileTypeCompatible(new_eng.getCurrentPosition().getType()))
             {
-                System.out.println("added");
                 wildEngimon.addWildEngimon(new_eng);
             }
             startTime = System.nanoTime();

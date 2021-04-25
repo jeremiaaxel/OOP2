@@ -26,13 +26,13 @@ public abstract class Engimon extends MapObject{
 
     protected boolean wild = false;
 
-    public Engimon(char engimonSymbol, String engimonName, String engimonSpesies, Parent parent, Tile position){
+    public Engimon(char engimonSymbol, String engimonName, String engimonSpesies, Parent parent, Tile position,Map map){
+        super(map);
         this.engimonSymbol = engimonSymbol;
         this.engimonName = engimonName;
         this.engimonSpesies = engimonSpesies;
         this.engimonParent = parent;
         this.currentPosition = position;
-        position.setOccupier(getEngimonSymbol());
         this.engimonLevel = 1;
         this.engimonExperience = 0;
         this.engimonCumulativeExp = 0;
@@ -40,6 +40,8 @@ public abstract class Engimon extends MapObject{
         this.engimonElement = new String[2];
         this.numberOfSkill = 0;
         this.numberOfElement = 0;
+
+        this.setTilePosition(position);
         loadImg();
     }
 
@@ -52,13 +54,6 @@ public abstract class Engimon extends MapObject{
         } catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    public void setMap(Map map){
-        this.map = map;
-        width = map.getTilesize();
-        height = map.getTilesize();
-        setPositionByMap(currentPosition.getAbsis(),currentPosition.getOrdinat());
     }
 
     public void setWild(boolean wild){
@@ -131,8 +126,8 @@ public abstract class Engimon extends MapObject{
     public void setMessageUnik(String msg) {
         this.messageUnik = msg;
     }
-    public void setTilePosition(Map map, Tile t){
-        map.setTileOcc(t.getOrdinat(),t.getAbsis(),t.getOccupierCode());
+    public void setTilePosition(Tile t){
+        setPositionByMap(t.getAbsis(),t.getOrdinat());
         this.currentPosition = t;
     }
 

@@ -32,16 +32,11 @@ public class WildEngimon{
     }
 
     public void init(){
-        Engimon wild1 = new Blaziken("wild blaziken", new Parent(), map.getTile(3,15));
-        Engimon wild2 = new Ampharos("wild ampharos", new Parent(), map.getTile(1,3));
-        Engimon wild3 = new Aggron("wild aggron", new Parent(), map.getTile(5,5));
-        Engimon wild4 = new Araquanid("wild araquanid", new Parent(),map.getTile(12,2));
-        Engimon wild5 = new Eiscue("wild eiscue", new Parent(),map.getTile(10,14));
-        wild1.setMap(map);
-        wild2.setMap(map);
-        wild3.setMap(map);
-        wild4.setMap(map);
-        wild5.setMap(map);
+        Engimon wild1 = new Blaziken("wild blaziken", new Parent(), map.getTile(3,15),map);
+        Engimon wild2 = new Ampharos("wild ampharos", new Parent(), map.getTile(1,3),map);
+        Engimon wild3 = new Aggron("wild aggron", new Parent(), map.getTile(5,5),map);
+        Engimon wild4 = new Araquanid("wild araquanid", new Parent(),map.getTile(12,2),map);
+        Engimon wild5 = new Eiscue("wild eiscue", new Parent(),map.getTile(10,14),map);
         addWildEngimon(wild1);
         addWildEngimon(wild2);
         addWildEngimon(wild3);
@@ -82,7 +77,6 @@ public class WildEngimon{
                     this.getNthEngimon(engimon_id).setUp(true);
                     break;
                 case 1:
-                    System.out.println("right");
                     this.getNthEngimon(engimon_id).setRight(true);
                     break;
                 case 2:

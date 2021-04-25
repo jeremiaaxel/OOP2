@@ -7,8 +7,8 @@ import java.util.Vector;
 
 public class Blaziken extends Engimon{
     
-    public Blaziken(String name, Parent parent, Tile position){
-        super('f',name,"Blaziken",parent,position);
+    public Blaziken(String name, Parent parent, Tile position, Map map){
+        super('f',name,"Blaziken",parent,position,map);
         super.addElement("Fire");
         try {
             super.addSkill(new HeatWave());

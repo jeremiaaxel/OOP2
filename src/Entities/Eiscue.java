@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class Eiscue extends Engimon{
     
-    public Eiscue(String name, Parent parent, Tile position){
-        super('i',name,"Eiscue",parent,position);
+    public Eiscue(String name, Parent parent, Tile position, Map map){
+        super('i',name,"Eiscue",parent,position,map);
         super.addElement("Ice");
         try {
             super.addSkill(new TripleAxel());

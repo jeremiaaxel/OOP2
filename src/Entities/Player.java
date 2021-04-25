@@ -55,13 +55,13 @@ public class Player extends MapObject implements Serializable {
         this.ownedEngimon = new Inventory<Engimon>();
         this.ownedSkill = new Inventory<Skill>();
         this.skillCounter = new ArrayList<Integer>();
-        this.activeEngimonId = 0;
         this.setPositionByMap(7, 5);
         moveDistance = 1;
 
-
         // load sprites
         loadSprites();
+
+        init();
     }
 
     public void loadSprites(){
@@ -105,6 +105,21 @@ public class Player extends MapObject implements Serializable {
         currentAction = IDLE;
         animation.setFrames(sprites.get(currentAction));
         animation.setDelay(800);
+    }
+
+    public void init(){
+        Engimon eng1 = new Blaziken("my blaziken", new Parent(), currentPosition,map);
+        Engimon eng2 = new Ampharos("my ampharos", new Parent(), currentPosition,map);
+        Engimon eng3 = new Aggron("my aggron", new Parent(), currentPosition,map);
+        Engimon eng4 = new Araquanid("my araquanid", new Parent(),currentPosition,map);
+        Engimon eng5 = new Eiscue("my eiscue", new Parent(),currentPosition,map);
+        addEngimon(eng1);
+        addEngimon(eng2);
+        addEngimon(eng3);
+        addEngimon(eng4);
+        addEngimon(eng5);
+        setActiveEngimonId(0);
+        setActiveEngimonPosition(map.getTile(5,8));
     }
 
     public Tile getPlayerPosition() { return this.currentPosition; }
@@ -152,7 +167,7 @@ public class Player extends MapObject implements Serializable {
         Tile oldActiveEngTile = new Tile();
         oldActiveEngTile.set(this.getActiveEngimon().getCurrentPosition());
         this.setActiveEngimonId(new_eng_id);
-        this.getActiveEngimon().setTilePosition(map, oldActiveEngTile);
+        this.getActiveEngimon().setTilePosition(oldActiveEngTile);
     }
 
     private void setActiveEngimonId(int id) {
@@ -163,13 +178,9 @@ public class Player extends MapObject implements Serializable {
         return this.activeEngimonId;
     }
 
-    public void setActiveEngimonPosition(Entities.Map map, Tile tile) {
-        // set occupier in map
-        map.setTileOcc(this.getActiveEngimon().getCurrentPosition(), ' ');
-
+    public void setActiveEngimonPosition(Tile tile) {
         // set currentPosition jadi tile
-        tile.setOccupier('X');
-        this.getActiveEngimon().setTilePosition(map, tile);
+        this.getActiveEngimon().setTilePosition(tile);
     }
 
     public void interact() {
@@ -395,6 +406,9 @@ public class Player extends MapObject implements Serializable {
             g.drawImage(animation.getImage(),
                     (int) x, (int) y, width, height, null);
         }
+        g.drawImage(getActiveEngimon().image,(int) getActiveEngimon().x,
+                (int) getActiveEngimon().y,
+                getActiveEngimon().width,getActiveEngimon().height, null);
     }
 
     public void move(Entities.Map map, char movecode) {
@@ -425,7 +439,7 @@ public class Player extends MapObject implements Serializable {
         Tile playerTile = new Tile();
         playerTile.set(this.getPlayerPosition());
         playerTile.setOccupier('X');
-        this.getActiveEngimon().setTilePosition(map, playerTile);
+        this.getActiveEngimon().setTilePosition(playerTile);
 
         // newTile -> playerPos
         newTile.setOccupier('P');

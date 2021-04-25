@@ -1,9 +1,10 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventory<T> {
+public class Inventory<T> implements Serializable {
     // privates
     private List<T> item_list = new ArrayList<T>();
     private static final int MAX_CAPACITY = 10;

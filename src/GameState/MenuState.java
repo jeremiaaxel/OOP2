@@ -70,6 +70,7 @@ public class MenuState extends GameState{
                 gameStateManager.setGameStates(GameStateManager.NEWGAME);
                 break;
             case 1 : // load game
+//                gameStateManager.setGameStates(GameStateManager.LOADGAME);
                 break;
             case 2 : // help
                 break;

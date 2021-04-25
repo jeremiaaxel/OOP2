@@ -1,5 +1,8 @@
 package Entities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.util.Vector;
 
 public class Blaziken extends Engimon{

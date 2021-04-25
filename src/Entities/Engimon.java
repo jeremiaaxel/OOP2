@@ -1,6 +1,11 @@
 package Entities;
 
-public abstract class Engimon {
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+
+public abstract class Engimon extends MapObject{
     protected char engimonSymbol;
     protected String engimonName;
     protected String engimonSpesies;
@@ -15,6 +20,11 @@ public abstract class Engimon {
     protected int numberOfSkill;
     protected int numberOfElement;
     protected String messageUnik;
+    protected final int maxCumExp = 500;
+    public boolean isdead = false;
+    protected BufferedImage image;
+
+    protected boolean wild = false;
 
     public Engimon(char engimonSymbol, String engimonName, String engimonSpesies, Parent parent, Tile position){
         this.engimonSymbol = engimonSymbol;
@@ -30,6 +40,29 @@ public abstract class Engimon {
         this.engimonElement = new String[2];
         this.numberOfSkill = 0;
         this.numberOfElement = 0;
+        loadImg();
+    }
+
+    public void loadImg(){
+        try {
+            animation = new Animation();
+            BufferedImage[] b = new BufferedImage[1];
+            b[0] = ImageIO.read(new FileInputStream("resources/engimon.gif"));
+            animation.setFrames(b);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setMap(Map map){
+        this.map = map;
+        width = map.getTilesize();
+        height = map.getTilesize();
+        setPositionByMap(currentPosition.getAbsis(),currentPosition.getOrdinat());
+    }
+
+    public void setWild(boolean wild){
+        this.wild = wild;
     }
 
     // getter
@@ -98,7 +131,7 @@ public abstract class Engimon {
     public void setMessageUnik(String msg) {
         this.messageUnik = msg;
     }
-    public void setPosition(Map map, Tile t){
+    public void setTilePosition(Map map, Tile t){
         map.setTileOcc(t.getOrdinat(),t.getAbsis(),t.getOccupierCode());
         this.currentPosition = t;
     }
@@ -133,18 +166,18 @@ public abstract class Engimon {
         engimonExperience+= exp;
         engimonCumulativeExp += exp;
     }
-    public Boolean isMaxExceed(int maxCumulativeExp){
-        return engimonCumulativeExp > maxCumulativeExp;
+
+    public void updateExistence(){
+        if (engimonCumulativeExp > maxCumExp ){
+            isdead = true;
+        }
     }
+
     public void levelUp(){
         if (engimonExperience >= 100){
             int levelplus = engimonExperience / 100;
             engimonLevel += levelplus;
             engimonExperience %= 100;
-        }
-
-        if (engimonLevel >= 30){
-            engimonSymbol = Character.toUpperCase(engimonSymbol);
         }
     }
     public void displayAllEngimonSkill(){
@@ -170,39 +203,58 @@ public abstract class Engimon {
         System.out.println();
     }
 
-    public Boolean move(Map map, char movecode, Boolean cekkompatibel){
-        Tile T;
-        if (movecode == 'w'){
-            T = map.getTileOnTop(currentPosition);
-        } else if (movecode == 'a'){
-            T = map.getTileOnleft(currentPosition);
-        } else if (movecode == 's'){
-            T = map.getTileBelow(currentPosition);
-        } else if (movecode == 'd'){
-            T = map.getTileOnRight(currentPosition);
-        }else{
-            return false;
+    public void move(){
+        moveDistance = this.map.getTilesize();
+        if (left){
+            System.out.println("left");
+            xtemp -= moveDistance;
+        } else if (right){
+            System.out.println("right");
+            xtemp += moveDistance;
+        } else if (up){
+            System.out.println("up");
+            ytemp -= moveDistance;
+        }  else if (down){
+            System.out.println("down");
+            ytemp += moveDistance;
         }
 
-        if (T.getType() != '#' && T.getOccupierCode() == ' '){
-            if ((cekkompatibel && this.isTileCompatible(T)) || !cekkompatibel)
-            {
-                map.setTileOcc(currentPosition.getOrdinat(),currentPosition.getAbsis(),' ');
-                map.setTileOcc(T.getOrdinat(),T.getAbsis(),getEngimonSymbol());
-                T.setOccupier(getEngimonSymbol());
-                currentPosition = T;
-                return true;
-            }
+        if (xtemp<0 || ytemp <0
+                || ytemp >= map.getTilesize()*(map.getNumberOfRow()-3)
+                || xtemp >= map.getTilesize()*(map.getNumberOfColumn()-3)){
+            xtemp = x;
+            ytemp = y;
         }
-        return false;
+
+        if (wild){
+            System.out.println("map :" + currentPosition.getOrdinat() +"," + currentPosition.getAbsis());
+            System.out.println("map :" + getMapRowFromOrd(ytemp) +"," + getMapColFromAbsis(xtemp));
+            System.out.println("type :" + map.getTile(getMapRowFromOrd(ytemp),
+                    getMapColFromAbsis(xtemp)).getType());
+            displayAllEngimonElement();
+            System.out.println(isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
+                    getMapColFromAbsis(xtemp)).getType()));
+            if (isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
+                    getMapColFromAbsis(xtemp)).getType())){
+                System.out.println("masuk");
+                setPosition(xtemp,ytemp);
+            };
+        } else {
+            setPosition(xtemp,ytemp);
+        }
     }
 
-    public Boolean isTileCompatible(Tile t){
-        if (engimonElement[0] == "Fire" || engimonElement[0] == "Electrical" || engimonElement[0] == "Ground"){
-            return t.getType() == '-';
-        }
-        else if (engimonElement[0] == "Water" || engimonElement[0] == "Ice"){
-            return t.getType() == 'o';
+    public Boolean isTileTypeCompatible(char type){
+        if (engimonElement[0] == "Water"){
+            return type == 's';
+        } else if (engimonElement[0] == "Electrical"){
+            return type == 'g';
+        } else if (engimonElement[0] == "Fire"){
+            return type == 'm';
+        } else if (engimonElement[0] == "Ground"){
+            return type == 'g';
+        } else if (engimonElement[0] == "Ice"){
+            return type == 't';
         }
         return false;
     }
@@ -210,11 +262,13 @@ public abstract class Engimon {
     public void displayAllEngimonElement(){
         int counter = 0;
         for (String el: engimonElement) {
-            System.out.print(el);
-            if (counter != numberOfElement-1){
-                System.out.print(",");
+            if (el != null) {
+                System.out.print(el);
+                if (counter != numberOfElement-1){
+                    System.out.print(",");
+                }
+                counter++;
             }
-            counter++;
         }
     }
 
@@ -231,5 +285,15 @@ public abstract class Engimon {
 
     public void setEngimonName(String name) {
         this.engimonName = name;
+    }
+
+    public void draw(Graphics2D g){
+            g.drawImage(animation.getImage(),
+                    (int) x, (int) y, width, height, null);
+    }
+
+    public void update(){
+        this.levelUp();
+        this.updateExistence();
     }
 }

@@ -1,6 +1,5 @@
 package Entities;
 
-import Game.GamePanel;
 import java.io.*;
 import java.util.Scanner;
 import java.awt.*;
@@ -17,6 +16,9 @@ public class Map {
     public static BufferedImage grassland_tile;
     public static BufferedImage tundra_tile;
     public static BufferedImage sea_tile;
+
+    public static final char NO_OCCUPIER = ' ';
+    public static final char OCCUPIED = 'x';
 
     public Map() {
         //
@@ -41,14 +43,16 @@ public class Map {
 
                 if (type != '#') {
                     if (type == 'm') {
-                        map[i][j] = new Tile(i, j, type, ' ', mountain_tile);
+                        map[i][j] = new Tile(j, i, type, NO_OCCUPIER, mountain_tile);
                     } else if (type == 's') {
-                        map[i][j] = new Tile(i, j, type, ' ', sea_tile);
+                        map[i][j] = new Tile(j, i, type, NO_OCCUPIER, sea_tile);
                     } else if (type == 'g') {
-                        map[i][j] = new Tile(i, j, type, ' ', grassland_tile);
+                        map[i][j] = new Tile(j, i, type, NO_OCCUPIER, grassland_tile);
                     } else if (type == 't') {
-                        map[i][j] = new Tile(i, j, type, ' ', tundra_tile);
+                        map[i][j] = new Tile(j, i, type, NO_OCCUPIER, tundra_tile);
                     }
+                } else{
+                    map[i][j] = new Tile(j, i, type, NO_OCCUPIER, null);
                 }
             }
         }
@@ -137,7 +141,7 @@ public class Map {
             j = 1;
             while (!found && j < col_size-1)
             {
-                if (map[i][j].getType() == type && map[i][j].getOccupierCode() == ' ')
+                if (this.map[i][j].getType() == type && this.map[i][j].getOccupierCode() == ' ')
                 {
                     found = true;
                 }
@@ -151,7 +155,7 @@ public class Map {
                 i++;
             }
         }
-        return map[i][j];
+        return this.map[i][j];
     }
 
     public void setTileSize(int size){
@@ -170,7 +174,7 @@ public class Map {
         //
         for (int i = 1; i < row_size-1; i++) {
             for (int j = 1; j < col_size-1; j++){
-                if (map[i][j].getOccupierCode() == ' ') {
+                if (this.map[i][j].getOccupierCode() == ' ') {
                     System.out.print(map[i][j].getType() + " ");
                 } else {
                     System.out.print(map[i][j].getOccupierCode() + " ");
@@ -202,34 +206,27 @@ public class Map {
         }
     }
 
-    public void getSurroundingTile(final Tile t, Tile[] surrTile)
-    {
-        if (surrTile.length < 4){
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        surrTile[0] = getTileOnTop(t);
-        surrTile[1] = getTileOnRight(t);
-        surrTile[2] = getTileBelow(t);
-        surrTile[3] = getTileOnleft(t);
+    public boolean isOccupied(int brs, int klm){
+        return map[brs][klm].getOccupierCode() == Map.OCCUPIED;
     }
 
     
-    // Kalau mau nyoba, "javac Map.java && java Map"
-    // public static void main(String[] args) {
-    //     Scanner scanner = new Scanner(System.in);
-    //     String filepath = scanner.nextLine();
-
-    //     Map map = new Map();
-    //     try {
-    //         String map_text = map.parse(filepath);
-    //         map = new Map(12, 14, map_text);
-    //         map.displayMap();
-    //     } catch (IOException e) {
-    //         System.out.println(e.getMessage());
-    //         System.out.println("a");
-    //     } finally {
-    //         scanner.close();
-    //     }
-        
-    // }
+//     Kalau mau nyoba, "javac Map.java && java Map"
+//     public static void main(String[] args) {
+//         Scanner scanner = new Scanner(System.in);
+//         String filepath = scanner.nextLine();
+//
+//         Map map = new Map();
+//         try {
+//             String map_text = map.parse(filepath);
+//             map = new Map(16, 20, map_text);
+//             map.displayMap();
+//         } catch (IOException e) {
+//             System.out.println(e.getMessage());
+//             System.out.println("a");
+//         } finally {
+//             scanner.close();
+//         }
+//
+//     }
 }

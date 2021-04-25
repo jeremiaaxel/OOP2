@@ -1,8 +1,8 @@
 ####################
 #ggggggggmmmmmmmmmm#
 #ggggggggggmmmmmmmm#
-#sgggggggggggmmmmmm#
-#sgggggggggggggmmmm#
+#ggggggggggggmmmmmm#
+#ggggggggggggggmmmm#
 #sggggggggggggggggg#
 #sssggggggggggggggg#
 #sssggggggggggttttt#

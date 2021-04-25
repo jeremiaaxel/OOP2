@@ -55,8 +55,8 @@ public class Player extends MapObject {
         this.ownedSkill = new Inventory<Skill>();
         this.skillCounter = new ArrayList<Integer>();
         this.activeEngimonId = 0;
-        this.setPosition(7 * map.getTilesize(), 5 * map.getTilesize());
-        moveDistance = 0.8;
+        this.setPositionByMap(7, 5);
+        moveDistance = 1;
 
 
         // load sprites
@@ -116,42 +116,6 @@ public class Player extends MapObject {
         this.currentPosition = map.getTile(tile);
     }
 
-    public void move(Entities.Map map, char movecode) {
-        Entities.Tile newTile = new Tile();
-        if (movecode == 'w') {
-            newTile.set(map.getTileOnTop(this.currentPosition));
-        } else if (movecode == 'a') {
-            newTile.set(map.getTileOnleft(this.currentPosition));
-        } else if (movecode == 's') {
-            newTile.set(map.getTileBelow(this.currentPosition));
-        } else if (movecode == 'd') {
-            newTile.set(map.getTileOnRight(this.currentPosition));
-        } else {
-            return;
-        }
-
-        if (!newTile.isMoveable()) {
-            return;
-        }
-        
-        // clear unused tile
-        Tile engTile = new Tile();
-        engTile.set(this.getActiveEngimon().getCurrentPosition());
-
-        map.setTileOcc(engTile.getAbsis(), engTile.getOrdinat(), ' ');
-
-        // playerpos -> activeEngPos
-        Tile playerTile = new Tile();
-        playerTile.set(this.getPlayerPosition());
-        playerTile.setOccupier('X');
-        this.getActiveEngimon().setPosition(map, playerTile);
-
-        // newTile -> playerPos
-        newTile.setOccupier('P');
-        map.setTileOcc(newTile.getOrdinat(), newTile.getAbsis(), 'P');
-        this.setPlayerPosition(map, newTile);
-    }
-
     public void showCommands() {
         println("commandnya apa weh");
     }
@@ -187,7 +151,7 @@ public class Player extends MapObject {
         Tile oldActiveEngTile = new Tile();
         oldActiveEngTile.set(this.getActiveEngimon().getCurrentPosition());
         this.setActiveEngimonId(new_eng_id);
-        this.getActiveEngimon().setPosition(map, oldActiveEngTile);
+        this.getActiveEngimon().setTilePosition(map, oldActiveEngTile);
     }
 
     private void setActiveEngimonId(int id) {
@@ -204,7 +168,7 @@ public class Player extends MapObject {
 
         // set currentPosition jadi tile
         tile.setOccupier('X');
-        this.getActiveEngimon().setPosition(map, tile);
+        this.getActiveEngimon().setTilePosition(map, tile);
     }
 
     public void interact() {
@@ -358,20 +322,16 @@ public class Player extends MapObject {
     public void nextPosition(){
         if (left){
             xtemp -= moveDistance;
-//            xtemp = x - moveDistance;
             ytemp = y;
         } else if (right){
             xtemp += moveDistance;
-//            xtemp = x + moveDistance;
             ytemp = y;
         } else if (up){
             xtemp = x;
             ytemp -= moveDistance;
-//            ytemp = y - moveDistance;
         } else if (down){
             xtemp = x;
             ytemp += moveDistance;
-//            ytemp = y + moveDistance;
         } else {
             xtemp = x;
             ytemp = y;
@@ -386,9 +346,11 @@ public class Player extends MapObject {
     }
 
     public void update(){
-//        // update position
+        // update semua engimon player
+
+        // update position
         nextPosition();
-//        checkCollision();
+        handleCollision();
         setPosition(xtemp,ytemp);
 
         // set animation
@@ -428,9 +390,54 @@ public class Player extends MapObject {
                     height,
                     null);
         } else {
-            //IDLE
+            // IDLE
             g.drawImage(animation.getImage(),
                     (int) x, (int) y, width, height, null);
+        }
+    }
+
+    public void move(Entities.Map map, char movecode) {
+        Entities.Tile newTile = new Tile();
+        if (movecode == 'w') {
+            newTile.set(map.getTileOnTop(this.currentPosition));
+        } else if (movecode == 'a') {
+            newTile.set(map.getTileOnleft(this.currentPosition));
+        } else if (movecode == 's') {
+            newTile.set(map.getTileBelow(this.currentPosition));
+        } else if (movecode == 'd') {
+            newTile.set(map.getTileOnRight(this.currentPosition));
+        } else {
+            return;
+        }
+
+        if (!newTile.isMoveable()) {
+            return;
+        }
+
+        // clear unused tile
+        Tile engTile = new Tile();
+        engTile.set(this.getActiveEngimon().getCurrentPosition());
+
+        map.setTileOcc(engTile.getAbsis(), engTile.getOrdinat(), ' ');
+
+        // playerpos -> activeEngPos
+        Tile playerTile = new Tile();
+        playerTile.set(this.getPlayerPosition());
+        playerTile.setOccupier('X');
+        this.getActiveEngimon().setTilePosition(map, playerTile);
+
+        // newTile -> playerPos
+        newTile.setOccupier('P');
+        map.setTileOcc(newTile.getOrdinat(), newTile.getAbsis(), 'P');
+        this.setPlayerPosition(map, newTile);
+    }
+
+    public void handleCollision(){
+        if (map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)) &&
+                !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map)){
+            System.out.println("occupied : " + getMapRowFromOrd(ytemp)+","+getMapColFromAbsis(xtemp));
+            xtemp = x;
+            ytemp = y;
         }
     }
 }

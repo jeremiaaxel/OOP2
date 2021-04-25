@@ -1,24 +1,29 @@
 package GameState;
 
-import Entities.Map;
-import Entities.Player;
+import Entities.*;
 import Game.GamePanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Random;
 
 public class PlayingState extends GameState{
 
     private Map map = new Map();
     private Player player;
+    private WildEngimon wildEngimon;
     private boolean newgame;
 
     private final int panelSize = 300;
+    private final long spawnDelay = 8000;
+    private long startTime;
 
     public PlayingState(GameStateManager gameStateManager, boolean newgame){
         this.gameStateManager = gameStateManager;
         this.newgame = newgame;
+        this.startTime = System.nanoTime();
         init();
     }
 
@@ -26,9 +31,10 @@ public class PlayingState extends GameState{
         if (newgame){
             try {
                 String map_text = map.parse("data/map.txt");
-                map = new Map(16, 20, map_text);
-                map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
+                this.map = new Map(16, 20, map_text);
+                this.map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
                 player = new Player("New Player", map); // NANTI MINTA NAMA DULU
+                wildEngimon = new WildEngimon(10,map);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -42,6 +48,12 @@ public class PlayingState extends GameState{
 
     public void update(){
         player.update();
+        wildEngimon.update();
+        if (wildEngimon.getNumberOfWildEngimon() == 0){
+            System.out.println("GAME OVER!!!");
+            gameStateManager.setGameStates(gameStateManager.MENUSTATE);
+        }
+        spawnRandowmWildEngimon();
     }
 
     public void keyPressed(int key){
@@ -86,6 +98,40 @@ public class PlayingState extends GameState{
         }
     }
 
+    public void spawnRandowmWildEngimon(){
+        long elapsed = (System.nanoTime() - startTime)/ 1000000;
+        if (elapsed > spawnDelay) {
+            Random rand = new Random(new Date().getTime());
+            int random_speciesid = rand.nextInt(100) % 5;
+            Engimon new_eng;
+            switch (random_speciesid)
+            {
+                case 0:
+                    new_eng = new Aggron("Wild Aggron",new Parent(),map.getEmptyTileInRowNWithType(3,'g'));
+                    break;
+                case 1:
+                    new_eng = new Ampharos("Wild Ampharos",new Parent(),map.getEmptyTileInRowNWithType(5,'g'));
+                    break;
+                case 2:
+                    new_eng = new Araquanid("Wild Araquanid",new Parent(),map.getEmptyTileInRowNWithType(7,'s'));
+                    break;
+                case 3:
+                    new_eng = new Blaziken("Wild Blaziken",new Parent(),map.getEmptyTileInRowNWithType(0,'m'));
+                    break;
+                default:
+                    new_eng = new Eiscue("Wild Eiscue",new Parent(),map.getEmptyTileInRowNWithType(7,'t'));
+            };
+            new_eng.setMap(map);
+            if (true)
+//            if (new_eng.isTileCompatible(new_eng.getCurrentPosition()))
+            {
+                System.out.println("added");
+                wildEngimon.addWildEngimon(new_eng);
+            }
+            startTime = System.nanoTime();
+        }
+    }
+
     public void keyReleased(int key){
         switch (key) {
             case KeyEvent.VK_UP:
@@ -108,10 +154,13 @@ public class PlayingState extends GameState{
     public void draw(Graphics2D g){
         // clear screen
         g.setColor(Color.BLACK);
-//        g.fillRect(0,0, GamePanel.WIDTH*GamePanel.SCALE, GamePanel.HEIGHT * GamePanel.SCALE);
+        int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
+        int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
+        g.fillRect((map.getNumberOfColumn()-2) * map.getTilesize(),0,panelWidth, panelHeight);
 
         // draw map
         map.drawMap(g);
         player.draw(g);
+        wildEngimon.draw(g);
     }
 }

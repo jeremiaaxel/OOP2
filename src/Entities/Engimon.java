@@ -22,6 +22,7 @@ public abstract class Engimon extends MapObject{
     protected String messageUnik;
     protected final int maxCumExp = 800;
     public boolean isdead = false;
+    private GradientPaint paint;
 
     protected boolean wild = true;
 
@@ -39,6 +40,9 @@ public abstract class Engimon extends MapObject{
         this.engimonElement = new String[2];
         this.numberOfSkill = 0;
         this.numberOfElement = 0;
+
+        width -= 5;
+        height -= 5;
 
         this.setTilePosition(position);
         loadImg();
@@ -247,7 +251,7 @@ public abstract class Engimon extends MapObject{
     public Boolean isTileTypeCompatible(char type){
         if (engimonElement[0] == "Water"){
             return type == 's';
-        } else if (engimonElement[0] == "Electrical"){
+        } else if (engimonElement[0] == "Electric"){
             return type == 'g';
         } else if (engimonElement[0] == "Fire"){
             return type == 'm';
@@ -288,12 +292,41 @@ public abstract class Engimon extends MapObject{
     }
 
     public void draw(Graphics2D g){
-            g.drawImage(animation.getImage(),
+        graphIndicatingElmt();
+        g.drawImage(animation.getImage(),
                     (int) x, (int) y, width, height, null);
+        g.setPaint( paint );
+        g.setStroke( new BasicStroke( 3 ) );
+        g.drawRect( (int) x, (int) y, width, height );
+        g.setStroke( new BasicStroke() );
     }
 
     public void update(){
         this.levelUp();
         this.updateExistence();
+    }
+
+    public void graphIndicatingElmt(){
+        if (getNthEngimonElement(1) == "Water"){
+            paint = new GradientPaint( (int) x, (int) y, Color.BLUE, (int) x + width, (int) y + height, Color.WHITE );
+        } else if (getNthEngimonElement(1) == "Electric"){
+            paint = new GradientPaint( (int) x, (int) y, Color.GRAY, (int) x + width, (int) y + height, Color.BLACK );
+        } else if (getNthEngimonElement(1) == "Fire"){
+            paint = new GradientPaint( (int) x, (int) y, Color.red, (int) x + width, (int) y + height, Color.orange );
+        } else if (getNthEngimonElement(1) == "Ice"){
+            paint = new GradientPaint( (int) x, (int) y, Color.cyan, (int) x + width, (int) y + height, Color.white );
+        } else{ //ground
+            paint = new GradientPaint( (int) x, (int) y, Color.green, (int) x + width, (int) y + height, Color.yellow );
+        }
+
+        if (getNumberOfElement() > 1){
+            if (getNthEngimonElement(1) == "Water" && getNthEngimonElement(2) == "Ice"){
+                paint = new GradientPaint( (int) x, (int) y,Color.cyan, (int) x + width, (int) y + height, Color.blue );
+            } else if (getNthEngimonElement(1) == "Water" && getNthEngimonElement(2) == "Ground"){
+                paint = new GradientPaint( (int) x, (int) y, Color.CYAN, (int) x + width, (int) y + height, Color.gray );
+            } else if (getNthEngimonElement(1) == "Fire" && getNthEngimonElement(2) == "Electric"){
+                paint = new GradientPaint( (int) x, (int) y, Color.GRAY, (int) x + width, (int) y + height, Color.RED );
+            }
+        }
     }
 }

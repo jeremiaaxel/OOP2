@@ -119,13 +119,16 @@ public class WildEngimon{
         return wildEngimonList.get(n);
     }
 
-    public void update(){
+    public void update(Player player){
         giveExp(100);
         randomMove();
         ArrayList<Engimon> engToDelete = new ArrayList<>();
         for (Engimon eng : wildEngimonList){
             eng.update();
-
+            if (eng.getEngimonLevel() > player.getActiveEngimon().getEngimonLevel()){
+                eng.setWidth(map.getTilesize());
+                eng.setHeight(map.getTilesize());
+            }
             if (eng.isdead){
                 engToDelete.add(eng);
             }

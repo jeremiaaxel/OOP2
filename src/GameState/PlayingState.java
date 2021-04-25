@@ -60,7 +60,7 @@ public class PlayingState extends GameState{
 
     public void update(){
         player.update();
-        wildEngimon.update();
+        wildEngimon.update(player);
         if (wildEngimon.getNumberOfWildEngimon() == 0){
             System.out.println("GAME OVER!!!");
             gameStateManager.setGameStates(gameStateManager.MENUSTATE);

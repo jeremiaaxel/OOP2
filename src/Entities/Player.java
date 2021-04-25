@@ -447,6 +447,7 @@ public class Player extends MapObject implements Serializable {
 
     public void draw(Graphics2D g){
         // draw player
+        System.out.println("pos " + currentPosition.getAbsis()+","+currentPosition.getOrdinat());
         if (left || right || up || down){
             g.drawImage(animation.getImage(),
                     (int) (x),
@@ -502,13 +503,22 @@ public class Player extends MapObject implements Serializable {
     }
 
     public void handleCollision(){
-        if (map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)) &&
-                !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map)){
-            System.out.println("occupied : " + getMapRowFromOrd(ytemp)+","+getMapColFromAbsis(xtemp));
+        if (checkCollision()){
+            println("occupied");
             xtemp = x;
             ytemp = y;
             getActiveEngimon().xtemp = getActiveEngimon().x;
             getActiveEngimon().ytemp = getActiveEngimon().y;
         }
+    }
+
+    public boolean checkCollision(){
+        boolean result = false;
+//        if (left){
+//            result = map.isOccupied(getMapRowFromOrd(ytemp-),getMapColFromAbsis(xtemp+width));
+//        } else if (up || down){
+//            result = map.isOccupied(getMapRowFromOrd(ytemp+height),getMapColFromAbsis(xtemp));
+//        }
+        return result && !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map);
     }
 }

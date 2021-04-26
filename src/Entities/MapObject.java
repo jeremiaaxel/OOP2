@@ -46,18 +46,18 @@ public class MapObject implements Serializable {
         return map;
     }
     protected int getMapColFromAbsis(double x){
-        return (int) (x/map.getTilesize() + 1);
+        return ((int) (((x+width/2)/map.getTilesize())) + 1);
     }
     protected int getMapRowFromOrd(double y){
-        return (int) (y/map.getTilesize() + 1);
+        return ((int) (((y+height/2)/map.getTilesize()) )+ 1);
     }
 
     public synchronized void setPosition(double x, double y){
         if (this.x_map!=-1){
             map.setTileOcc(this.y_map,this.x_map,map.NO_OCCUPIER);
         }
-        this.x_map = (int) (x/map.getTilesize() + 1);
-        this.y_map = (int) (y/map.getTilesize() + 1);
+        this.x_map = ((int) (((x+width/2)/map.getTilesize()) + 1));
+        this.y_map = ((int) (((y+height/2)/map.getTilesize()) + 1));
         this.x = x;
         this.y = y;
         this.xtemp = x;
@@ -71,6 +71,7 @@ public class MapObject implements Serializable {
         }
         this.x_map = x_map;
         this.y_map = y_map;
+        System.out.println(y+","+x);
         System.out.println(y_map+","+x_map);
         this.x = (x_map - 1) * map.getTilesize();
         this.y = (y_map - 1) * map.getTilesize();
@@ -83,6 +84,7 @@ public class MapObject implements Serializable {
         this.dx = dx;
         this.dy = dy;
     }
+
     public void setLeft(boolean left){ this.left = left;}
     public void setRight(boolean right){ this.right = right;}
     public void setUp(boolean up){ this.up = up;}

@@ -119,6 +119,13 @@ public class PlayingState extends GameState {
         this.player.addEngimon(eng4);
         this.player.addEngimon(eng5);
         this.player.switchActiveEngimon(0);
+
+        // DEBUG THROW ITEM/ENGIMON
+         this.player.addSkillItem(new TripleAxel());
+         this.player.addSkillItem(new ParabolicCharge());
+         this.player.addSkillItem(new ParabolicCharge());
+         this.player.addSkillItem(new ParabolicCharge());
+         this.player.addSkillItem(new ParabolicCharge());
     }
 
     public synchronized void playerLoad(){
@@ -279,8 +286,11 @@ public class PlayingState extends GameState {
             case KeyEvent.VK_5:
                 //switch active engimon
                 panelstate = 2;
-                intInput = getIntInput(player.getListIdEng(),
-                        "Masukkan ID engimon","Switch Active Engimon");
+                List<String> ownedEngimons = new ArrayList<>();
+                for (int i = 0; i < this.player.getOwnedEngimonSize(); i++) {
+                    ownedEngimons.add(i + " - " + this.player.getEngimon(i).getEngimonName());
+                }
+                intInput = Integer.parseInt(String.valueOf(getStrInputDropDown(ownedEngimons.toArray(), "Masukkan ID engimon","Switch Active Engimon").charAt(0)));
                 player.switchActiveEngimon(intInput);
                 break;
             case KeyEvent.VK_6:
@@ -293,16 +303,30 @@ public class PlayingState extends GameState {
                 break;
             case KeyEvent.VK_7:
                 // melepas skill/engimon
-                intInput = getIntInput(new Object[]{1,2},
-                        "Pilih jenis item yang akan dilepas\n1 : Skill\n2 : Engimon)",
-                        "Show Engimon Details");
+                String[] opt = new String[]{"1 - Skill", "2 - Engimon"};
+                intInput = Integer.parseInt(String.valueOf(getStrInputDropDown(opt, "Pilih jenis item yang akan dilepas\n1 : Skill\n2 : Engimon", "Buang Skill Item/Lepas Engimon").charAt(0)));
                 if (intInput == 1){
                     // tampilin option list id skill dulu
-//                    player.throwSomeSkillItems(player.getSkillItem(),id);
+                    List<String> ownedSkill = this.player.getOwnedSkillNames();
+                    int pilihan = Integer.parseInt(String.valueOf(getStrInputDropDown(ownedSkill.toArray(), "Pilih Skill Item yang ingin dibuang", "Throw Some Skill Item").charAt(0)));
+                    List<Integer> amount = new ArrayList<>();
+                    for (int i = 1; i <= this.player.getSkillItemQuantity(pilihan); i++) {
+                        amount.add(i);
+                    }
+                    int amountChosen = getIntInput(amount.toArray(), "Banyak skill item yang ingin dibuang", "Throw Some Skill Item");
+
+                    player.throwSomeSkillItems(player.getSkillItem(pilihan), amountChosen);
+
                 } else{
-                    intInput = getIntInput(player.getListIdEng(),
-                            "Pilih ID Engimon yang akan dilepas\n1 : Skill\n2 : Engimon)",
-                            "Show Engimon Details");
+                    ownedEngimons = new ArrayList<>();
+                    for (int i = 0; i < this.player.getOwnedEngimonSize(); i++) {
+                        ownedEngimons.add(i + " - " + this.player.getEngimon(i).getEngimonName());
+                    }
+                    intInput = Integer.parseInt(String.valueOf(getStrInputDropDown(
+                            ownedEngimons.toArray(),
+                            "Pilih ID Engimon yang akan dilepas",
+                            "Free An Engimon").charAt(0)));
+
                     player.freeTheEngimon(intInput);
                 }
                 break;
@@ -324,10 +348,8 @@ public class PlayingState extends GameState {
                 // Learn Skill
                 // Udah aman harusnya
                 // Get nama-nama skill yang dipunya
-                List<String> ownedSkill = new ArrayList<>();
-                for (int i=0; i < this.player.getOwnedSkillItemSize(true); i++) {
-                    ownedSkill.add(i + " - " + this.player.getSkillItem(i).getName());
-                }
+
+                List<String> ownedSkill = this.player.getOwnedSkillNames();
 
                 int pilihan = Integer.parseInt(String.valueOf(getStrInputDropDown(ownedSkill.toArray(), "Masukan skill item yang ingin dipelajari", "Learn Skill Item").charAt(0)));
                 try {

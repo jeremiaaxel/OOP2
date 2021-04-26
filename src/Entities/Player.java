@@ -91,32 +91,13 @@ public class Player extends MapObject implements Serializable {
         loadSprites();
     }
 
-    public String describe() throws Exception {
-        String result = "";
-
-        // PLAYER SECTION
-        result.concat(this.getPlayerName() + "\n");
-
-        Tile playerPosition = this.getPlayerPosition();
-        result.concat(playerPosition.getAbsis() + "," + playerPosition.getOrdinat());
-
-        // ENGIMONS SECTION
-        List<Engimon> playerOwnedEngimons = new ArrayList<>();
-        for (int i = 0; i < this.getOwnedEngimonSize(); i++) {
-            Engimon currEng = this.getEngimon(i);
-
-
-            playerOwnedEngimons.add(this.getEngimon(i));
-        }
-
-        List<Skill> playerOwnedSkills = new ArrayList<>();
+    public List<String> getOwnedSkillNames() {
+        List<String> owned = new ArrayList<>();
         for (int i = 0; i < this.getOwnedSkillItemSize(true); i++) {
-            playerOwnedSkills.add(this.getSkillItem(i));
+            owned.add(i + " - " + this.getSkillItem(i).getName() + " - Quantity : " + this.getSkillItemQuantity(i));
         }
-
-        return result;
+        return owned;
     }
-
 
     public void loadSprites(){
         try

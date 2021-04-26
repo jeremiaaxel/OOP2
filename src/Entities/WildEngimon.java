@@ -191,4 +191,30 @@ public class WildEngimon implements Serializable {
         }
         return null;
     }
+
+    public ArrayList<Engimon> getWildEngimonList() {
+        return wildEngimonList;
+    }
+
+    public void draw_WildEngimon(Graphics2D g,int w, int h){
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(new Color(102,51,0));
+        g2.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
+        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+
+        g.drawString("* Daftar Wild Engimon :",map.getNumberOfColumn()*map.getTilesize()-20,100);
+        ArrayList<Engimon> b = this.getWildEngimonList();
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+        for (int i =0; i < this.getWildEngimonList().size(); i++){
+            g.drawString("- "+b.get(i).getEngimonName(),map.getNumberOfColumn() * map.getTilesize()+20,125+(50*i));
+            g.drawString(String.format("Level : %d | Exp : %d",b.get(i).getEngimonLevel(), b.get(i).getEngimonExp()),map.getNumberOfColumn()*map.getTilesize()+20,150+(50*i));
+        }
+
+    }
 }

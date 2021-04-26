@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Meganium extends Engimon{
+public class Meganium extends Engimon implements Serializable {
     
     public Meganium(String name, Parent parent, Tile position,Map map){
         super('n',name,"Meganium",parent,position,map);

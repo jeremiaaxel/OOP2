@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class BubbleBeam extends Skill {
+public class BubbleBeam extends Skill implements Serializable {
 
     public BubbleBeam(){
         super();

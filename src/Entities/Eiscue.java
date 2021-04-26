@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Eiscue extends Engimon{
+public class Eiscue extends Engimon implements Serializable {
     
     public Eiscue(String name, Parent parent, Tile position, Map map){
         super('i',name,"Eiscue",parent,position,map);

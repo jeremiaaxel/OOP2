@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Liquidation extends Skill {
+public class Liquidation extends Skill implements Serializable {
     
     public Liquidation(){
         super();

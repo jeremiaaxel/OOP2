@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class FishiousRend extends Skill {
+public class FishiousRend extends Skill implements Serializable {
     
     public FishiousRend(){
         super();

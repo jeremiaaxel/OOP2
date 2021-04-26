@@ -52,29 +52,37 @@ public abstract class Engimon extends MapObject implements Serializable {
         loadImg();
     }
 
-    public String describe() throws Exception {
-        String result = "";
-        result.concat("ENGIMONPARENT\n");
-        result.concat(this.getEngimonParent().describe());
-        result.concat("ENGIMON\n");
-        result.concat(this.getEngimonSymbol() + "\n");
-        result.concat(this.getEngimonName() + "\n");
-        result.concat(this.getEngimonSpesies() + "\n");
-        result.concat(this.getEngimonLevel() + "\n");
-        result.concat(this.getEngimonExp() + "\n");
-        for (int j = 0; j < this.getNumberOfSkill(); j++) {
-            result.concat("ENGIMONSKILL " + j + "\n");
-            result.concat(this.getNthEngimonSkill(j).describe());
+    public Engimon(Engimon eng) {
+        super(eng.map);
+        this.engimonSymbol = eng.engimonSymbol;
+        this.engimonName = eng.engimonName;
+        this.engimonSpesies = eng.engimonSpesies;
+        this.engimonParent = eng.engimonParent;
+        this.currentPosition = eng.currentPosition;
+        this.engimonLevel = eng.engimonLevel;
+        this.engimonExperience = eng.engimonExperience;
+        this.engimonCumulativeExp = eng.engimonCumulativeExp;
+        this.engimonSkill = new Skill[4];
+        for (int i = 0; i < eng.engimonSkill.length; i++) {
+            engimonSkill[i] = eng.engimonSkill[i];
         }
-        for (int i = 0; i < this.getNumberOfElement(); i++) {
-            result.concat("ENGIMONELMT " + i + "\n");
-            result.concat(this.getNthEngimonElement(i) + "\n");
+        this.engimonElement = new String[2];
+        for (int i = 0; i < eng.engimonElement.length; i++) {
+            engimonElement[i] = eng.engimonElement[i];
         }
-        result.concat(this.getCurrentPosition().getAbsis() + "," + this.getCurrentPosition().getOrdinat() + "\n");
-        result.concat(this.getEngimonLife() + "\n");
-        return result;
+        this.numberOfSkill = eng.numberOfSkill;
+        this.numberOfElement = eng.numberOfElement;
+
+        width -= 5;
+        height -= 5;
+
+        this.setTilePosition(eng.currentPosition);
+        loadImg();
     }
-    public Parent getEngimonParent() { return this.engimonParent; }
+
+    public Parent getEngimonParent() {
+        return this.engimonParent;
+    }
 
     public void loadImg(){
         try {
@@ -187,10 +195,22 @@ public abstract class Engimon extends MapObject implements Serializable {
     public void addSkill(Skill s) throws Exception {
         if (numberOfSkill == 4) {
             throw new Exception("Engimon ini sudah mencapai maksimum banyak skill");
+        } else if (isSkillOwned(s)) {
+            throw new Exception("Engimon ini sudah memiliki skill tersebut");
         }
         engimonSkill[numberOfSkill] = s;
         numberOfSkill++;
     }
+
+    public boolean isSkillOwned(Skill skill) {
+        for (int i = 0; i < this.numberOfSkill; i++) {
+            if (skill.getName() == this.engimonSkill[i].getName()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addElement(String elmt) {
         if (numberOfElement < 2) {
             engimonElement[numberOfElement] = elmt;

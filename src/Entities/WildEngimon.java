@@ -21,7 +21,7 @@ public class WildEngimon implements Serializable {
         this.map = map;
         delayToMove = 100;
         delayToLevelUp = 5000;
-        init();
+//        init();
     }
     public WildEngimon(int capacity, Map map){
         wildEngimonList = new ArrayList<>();
@@ -29,7 +29,7 @@ public class WildEngimon implements Serializable {
         this.map = map;
         delayToMove = 800;
         delayToLevelUp = 10000;
-        init();
+//        init();
     }
 
     public WildEngimon(WildEngimon wildEngimonin, Map map) {

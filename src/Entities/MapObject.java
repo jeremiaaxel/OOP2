@@ -80,11 +80,6 @@ public class MapObject implements Serializable {
         map.setTileOcc(this.y_map,this.x_map,map.OCCUPIED);
     }
 
-    public void setVector(double dx, double dy){
-        this.dx = dx;
-        this.dy = dy;
-    }
-
     public void setLeft(boolean left){ this.left = left;}
     public void setRight(boolean right){ this.right = right;}
     public void setUp(boolean up){ this.up = up;}

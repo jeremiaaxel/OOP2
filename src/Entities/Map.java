@@ -60,10 +60,10 @@ public class Map implements Serializable {
 
     public void loadTileImg(){
         try{
-            mountain_tile = ImageIO.read(new FileInputStream("../resources/mountains.jpg"));
-            grassland_tile = ImageIO.read(new FileInputStream("../resources/grassland.jpg"));
-            tundra_tile = ImageIO.read(new FileInputStream("../resources/tundra.jpg"));
-            sea_tile = ImageIO.read(new FileInputStream("../resources/sea.png"));
+            mountain_tile = ImageIO.read(new FileInputStream("resources/mountains.jpg"));
+            grassland_tile = ImageIO.read(new FileInputStream("resources/grassland.jpg"));
+            tundra_tile = ImageIO.read(new FileInputStream("resources/tundra.jpg"));
+            sea_tile = ImageIO.read(new FileInputStream("resources/sea.png"));
         } catch(Exception e){
             e.printStackTrace();
         }

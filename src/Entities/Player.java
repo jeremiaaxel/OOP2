@@ -239,8 +239,8 @@ public class Player extends MapObject implements Serializable {
         showEngimonDetails(this.activeEngimonId);
     }
 
-    public void breed(int id1, int id2) {
-        Breeding breed = new Breeding(this.getEngimon(id1), this.getEngimon(id2), this.getPlayerPosition() /*map, player*/);
+    public void breed(int id1, int id2, Player player) {
+        Breeding breed = new Breeding(this.getEngimon(id1), this.getEngimon(id2), this.getPlayerPosition(), player);
 
     }
 

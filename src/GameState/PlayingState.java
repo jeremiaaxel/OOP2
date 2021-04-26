@@ -239,6 +239,16 @@ public class PlayingState extends GameState {
                 id = getIntInput(player.getListIdEng(),
                         "Masukkan ID engimon","Show Engimon Details");
 //                player.showDetails(id);
+                break;
+            case KeyEvent.VK_9:
+                //Breeding
+                int id1 = getIntInput(player.getListIdEng(),"Masukkan ID engimon Pertama yang ingin di breed","Breeding");
+                int id2 = getIntInput(player.getListIdEng(),"Masukkan ID engimon Kedua yang ingin di breed","Breeding");
+                this.player.getEngimon(id1).setLevel(5);
+                this.player.getEngimon(id2).setLevel(5);
+                player.breed(id1, id2, this.player);
+                break;
+
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
             default:

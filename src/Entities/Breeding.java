@@ -6,6 +6,10 @@ import java.util.Vector;
 import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import GameState.*;
 
 public class Breeding extends Exception{
     protected boolean successBreed;
@@ -22,13 +26,27 @@ public class Breeding extends Exception{
     public static final char NO_OCCUPIER = ' ';
     public static final char OCCUPIED = 'x';
 
-    public Breeding(Engimon e1, Engimon e2, Tile childPosition/*, Map Player player*/){
+    public Breeding(Engimon e1, Engimon e2, Tile childPosition, Player player){
         this.successBreed = false;
         this.numberOfSkill = 0;
-        makeChild(e1, e2, childPosition/*, player*/);
+        makeChild(e1, e2, childPosition, player);
     }
 
-    public void makeChild(Engimon e1, Engimon e2, Tile childPosition/*, Player player*/){
+    public String getStrInput(Player player, String message, String title){
+        player.setIdle(true);
+        JFrame f = new JFrame();
+        String s = (String) JOptionPane.showInputDialog(
+                f,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "");
+        return s;
+    }
+
+    public void makeChild(Engimon e1, Engimon e2, Tile childPosition, Player player){
         try{
             if (isBreedPossible(e1, e2)){
                 Parent parent = new Parent(e1.getEngimonName(), e1.getEngimonSpesies(), e2.getEngimonName(), e2.getEngimonSpesies());
@@ -39,55 +57,64 @@ public class Breeding extends Exception{
                     Scanner keyboard = new Scanner(System.in);
                     System.out.println("Breeding berhasil!!!");
                     System.out.print("Silahkan beri nama untuk engimon baru mu : ");
-                    String nama = keyboard.nextLine();
+                    //String nama = keyboard.nextLine();
+                    String nama = getStrInput(player, "Silahkan beri nama untuk engimon baru mu : ", "Breeding berhasil!!!");
 
                     if (e1.getEngimonSpesies() == "Aggron"){
                         Engimon eChild = new Aggron(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Ampharos"){
                         Engimon eChild = new Ampharos(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Araquanid"){
                         Engimon eChild = new Araquanid(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Blaziken"){
                         Engimon eChild = new Blaziken(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Eiscue"){
                         Engimon eChild = new Eiscue(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Loceam"){
                         Engimon eChild = new Loceam(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Megalapras"){
                         Engimon eChild = new Megalapras(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e1.getEngimonSpesies() == "Meganium"){
                         Engimon eChild = new Meganium(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
 
                     //this.skillGabungan[0] = eChild.getNthEngimonSkill(1);
@@ -105,55 +132,64 @@ public class Breeding extends Exception{
                     Scanner keyboard = new Scanner(System.in);
                     System.out.println("Breeding berhasil!!!");
                     System.out.print("Silahkan beri nama untuk engimon baru mu : ");
-                    String nama = keyboard.nextLine();
+                    //String nama = keyboard.nextLine();
+                    String nama = getStrInput(player, "Silahkan beri nama untuk engimon baru mu : ", "Breeding berhasil!!!");
 
                     if (e2.getEngimonSpesies() == "Aggron"){
                         Engimon eChild = new Aggron(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Ampharos"){
                         Engimon eChild = new Ampharos(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Araquanid"){
                         Engimon eChild = new Araquanid(nama, parent, childPosition,e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Blaziken"){
                         Engimon eChild = new Blaziken(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Eiscue"){
                         Engimon eChild = new Eiscue(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Loceam"){
                         Engimon eChild = new Loceam(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Megalapras"){
                         Engimon eChild = new Megalapras(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     else if (e2.getEngimonSpesies() == "Meganium"){
                         Engimon eChild = new Meganium(nama, parent, childPosition, e1.getMap());
                         this.numberOfSkill++;
                         addSkillWithPrior(e1, e2, eChild);
-                        eChild.displayEngimonInfo();
+                        //eChild.displayEngimonInfo();
+                        player.addEngimon(eChild);
                     }
                     
                     //this.skillGabungan[0] = eChild.getNthEngimonSkill(1);
@@ -176,14 +212,16 @@ public class Breeding extends Exception{
                             Scanner keyboard = new Scanner(System.in);
                             System.out.println("Breeding berhasil!!!");
                             System.out.print("Silahkan beri nama untuk engimon baru mu : ");
-                            String nama = keyboard.nextLine();
+                            //String nama = keyboard.nextLine();
+                            String nama = getStrInput(player, "Silahkan beri nama untuk engimon baru mu : ", "Breeding berhasil!!!");
 
                             Engimon eChild = new Loceam(nama, parent, childPosition, e1.getMap());
                             this.numberOfSkill++;
                             addSkillWithPrior(e1, e2, eChild);
                             //player.addEngimon(eChild);
                             //addSkillWithPrior(e1, e2);
-                            eChild.displayEngimonInfo();
+                            //eChild.displayEngimonInfo();
+                            player.addEngimon(eChild);
                             int lvl1 = e1.getEngimonLevel();
                             int lvl2 = e2.getEngimonLevel();
                             e1.setLevel(lvl1-3);
@@ -195,14 +233,16 @@ public class Breeding extends Exception{
                             Scanner keyboard = new Scanner(System.in);
                             System.out.println("Breeding berhasil!!!");
                             System.out.print("Silahkan beri nama untuk engimon baru mu : ");
-                            String nama = keyboard.nextLine();
+                            //String nama = keyboard.nextLine();
+                            String nama = getStrInput(player, "Silahkan beri nama untuk engimon baru mu : ", "Breeding berhasil!!!");
 
                             Engimon eChild = new Megalapras(nama, parent, childPosition, e1.getMap());
                             this.numberOfSkill++;
                             addSkillWithPrior(e1, e2, eChild);
                             //player.addEngimon(eChild);
                             //addSkillWithPrior(e1, e2);
-                            eChild.displayEngimonInfo();
+                            //eChild.displayEngimonInfo();
+                            player.addEngimon(eChild);
                             int lvl1 = e1.getEngimonLevel();
                             int lvl2 = e2.getEngimonLevel();
                             e1.setLevel(lvl1-3);
@@ -214,14 +254,16 @@ public class Breeding extends Exception{
                             Scanner keyboard = new Scanner(System.in);
                             System.out.println("Breeding berhasil!!!");
                             System.out.print("Silahkan beri nama untuk engimon baru mu : ");
-                            String nama = keyboard.nextLine();
+                            //String nama = keyboard.nextLine();
+                            String nama = getStrInput(player, "Silahkan beri nama untuk engimon baru mu : ", "Breeding berhasil!!!");
                             
                             Engimon eChild = new Meganium(nama, parent, childPosition, e1.getMap());
                             this.numberOfSkill++;
                             addSkillWithPrior(e1, e2, eChild);
                             //player.addEngimon(eChild);
                             //addSkillWithPrior(e1, e2);
-                            eChild.displayEngimonInfo();
+                            //eChild.displayEngimonInfo();
+                            player.addEngimon(eChild);
                             int lvl1 = e1.getEngimonLevel();
                             int lvl2 = e2.getEngimonLevel();
                             e1.setLevel(lvl1-3);
@@ -410,7 +452,7 @@ public class Breeding extends Exception{
         return banyak;
     }
 
-    public static void main(String[] args) throws Exception{
+    /*public static void main(String[] args) throws Exception{
         Map map = new Map();
         String map_text = map.parse("../data/map.txt");
         map = new Map(16, 20, map_text);
@@ -447,5 +489,5 @@ public class Breeding extends Exception{
         Breeding b2 = new Breeding(e1, e2, position);
         Breeding b3 = new Breeding(e1, e9, position);
         Breeding b4 = new Breeding(e6, e1, position);
-    }
+    }*/
 }

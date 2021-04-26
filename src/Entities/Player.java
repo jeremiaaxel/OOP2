@@ -686,4 +686,24 @@ public class Player extends MapObject implements Serializable {
         }
         return list;
     }
+
+    public Engimon getEnemeyArround(WildEngimon w){
+        Engimon eng = w.engimonOnTheTile(map.getTileOnleft(currentPosition));
+        if (eng != null){
+            return eng;
+        }
+        eng = w.engimonOnTheTile(map.getTileOnRight(currentPosition));
+        if (eng != null){
+            return eng;
+        }
+        eng = w.engimonOnTheTile(map.getTileOnTop(currentPosition));
+        if (eng != null){
+            return eng;
+        }
+        eng = w.engimonOnTheTile(map.getTileBelow(currentPosition));
+        if (eng != null){
+            return eng;
+        }
+        return null;
+    }
 }

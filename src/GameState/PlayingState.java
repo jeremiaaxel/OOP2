@@ -16,6 +16,7 @@ public class PlayingState extends GameState {
     private Map map = new Map();
     private Player player;
     private WildEngimon wildEngimon;
+    private Battle battle;
     private boolean newgame;
 
     private final int panelSize = 300;
@@ -178,6 +179,9 @@ public class PlayingState extends GameState {
             case 7:
                 player.showCommands(g,x_startpanel+15,y_startpanel+50);
                 break;
+            case 8 :
+                battle.draw_Battle(g, panelWidth, panelHeight);
+                break;
             default:
                 break;
         }
@@ -186,7 +190,9 @@ public class PlayingState extends GameState {
     public synchronized void keyPressed(int key){
         switch (key) {
             case KeyEvent.VK_SPACE:
-//                doBattle();
+                battle = new Battle(player.getActiveEngimon(), player.getActiveEngimon(), map, player, true); //this.battle.setBattle(true);
+                battle();
+                panelstate = 8;
                 break;
             case KeyEvent.VK_UP:
                 this.player.setUp(true);
@@ -353,6 +359,8 @@ public class PlayingState extends GameState {
             case KeyEvent.VK_RIGHT:
                 this.player.setRight(false);
                 break;
+            case KeyEvent.VK_SPACE:
+                this.battle.setBattle(false);
             default:
                 break;
         }
@@ -373,6 +381,23 @@ public class PlayingState extends GameState {
             wildEngimon.draw(g);
             player.draw(g);
             viewPanel(g);
+        }
+    }
+
+    public synchronized  void battle(){
+        try {
+            Engimon enemy = player.getEnemeyArround(wildEngimon);
+            boolean state = this.battle.getbattlestate();
+            if (enemy != null){
+                this.battle = new Battle(this.player.getActiveEngimon(), enemy, this.map, this.player, state);
+                if (battle.getbattlestate() == true) {
+                    //battle.displatBattleInfo(this.player,this.wildEngimon);
+                    battle.doBattle(this.map, this.player, this.wildEngimon);
+                    System.out.println("Battle succeed");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

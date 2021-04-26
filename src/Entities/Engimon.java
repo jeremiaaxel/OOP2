@@ -263,11 +263,17 @@ public abstract class Engimon extends MapObject implements Serializable {
         //exp
         g.drawString(String.format("Exp : %d ", getEngimonExp()), x, 275 );
         // cumulative exp
-        g.drawString(String.format("Max Cumulative Exp : %d ", getCumulativeExp()), x, 295 );
+        g.drawString(String.format("Cumulative Exp : %d ", getCumulativeExp()), x, 295 );
         //skill
         g.drawString("Skill : ", x, 315);
+        drawSkill(g,x+10,330);
+    }
+
+    public void drawSkill(Graphics2D g, int x, int y){
         for (int j = 1; j <= getNumberOfSkill(); j++) {
-            g.drawString("- " + getNthEngimonSkill(j).getName(), x + 10, 315 + (15 * j));
+            g.drawString("- " + getNthEngimonSkill(j).getName(), x, 315 + (15 * j));
+            g.drawString("Mastery Level : " + getNthEngimonSkill(j).getMasteryLevel(), x + 20, 315 + (15 * j + 15));
+            g.drawString("Base Power    : " + getNthEngimonSkill(j).getBasePower(), x + 20, 315 + (15 * j + 30));
         }
     }
 
@@ -276,7 +282,6 @@ public abstract class Engimon extends MapObject implements Serializable {
         for(int a = 1; a <= getNumberOfElement(); a++) {
             g.drawString(getNthEngimonElement(a), x, y+((a-1)*15));
         }
-
     }
 
     public void move(){

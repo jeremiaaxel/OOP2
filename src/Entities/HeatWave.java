@@ -8,7 +8,7 @@ public class HeatWave extends Skill {
         super();
         name = "Heat Wave";
         basePower = 15;
-        masteryLevel = 10;
+        masteryLevel = 1;
         compatibleElements.add("Fire");
         compatibleElements.add("Electric");
     }

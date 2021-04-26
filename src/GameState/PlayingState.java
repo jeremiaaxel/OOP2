@@ -70,7 +70,6 @@ public class PlayingState extends GameState {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
      public synchronized void playerInit(){
@@ -147,10 +146,15 @@ public class PlayingState extends GameState {
     public void viewPanel(Graphics2D g){
         int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
         int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
+        int x_startpanel = (map.getNumberOfColumn()-2)*map.getTilesize();
+        int y_startpanel = 0;
 
-        Graphics2D g2 = g;
         g.setColor(new Color(102,51,0));
-        g.fillRect((map.getNumberOfColumn()-2)*map.getTilesize(),0,panelWidth,panelHeight);
+        g.fillRect(x_startpanel,y_startpanel,panelWidth,panelHeight);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
+        g.drawString("Status",x_startpanel+80,50);
 
         switch (panelstate){
             case 1 :
@@ -167,6 +171,12 @@ public class PlayingState extends GameState {
                 break;
             case 5 :
                 player.getEngimon(intInput).draw_infoengimon(g);
+                break;
+            case 6 :
+                player.interact(g,x_startpanel+20,y_startpanel+80);
+                break;
+            case 7:
+                player.showCommands(g,x_startpanel+15,y_startpanel+50);
                 break;
             default:
                 break;
@@ -250,7 +260,15 @@ public class PlayingState extends GameState {
                 this.player.getEngimon(id2).setLevel(5);
                 player.breed(id1, id2, this.player);
                 break;
-
+            case KeyEvent.VK_I:
+                panelstate = 6;
+                break;
+            case KeyEvent.VK_H:
+                panelstate = 7;
+                break;
+            case KeyEvent.VK_C:
+                panelstate = 8;
+                break;
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
             default:

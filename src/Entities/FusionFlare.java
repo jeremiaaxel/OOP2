@@ -8,7 +8,7 @@ public class FusionFlare extends Skill {
         super();
         name = "Fusion Flare";
         basePower = 20;
-        masteryLevel = 15;
+        masteryLevel = 2;
         compatibleElements.add("Fire");
         compatibleElements.add("Electric");
     }

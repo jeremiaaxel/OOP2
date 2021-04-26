@@ -8,7 +8,7 @@ public class MudShot extends Skill {
         super();
         name = "Mud Shot";
         basePower = 9;
-        masteryLevel = 15;
+        masteryLevel = 1;
         compatibleElements.add("Ground");
         compatibleElements.add("Water");
         compatibleElements.add("Ice");

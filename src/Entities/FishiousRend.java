@@ -8,7 +8,7 @@ public class FishiousRend extends Skill {
         super();
         name = "Fishious Rend";
         basePower = 85;
-        masteryLevel = 10;
+        masteryLevel = 3;
         compatibleElements.add("Water");
         compatibleElements.add("Ice");
         compatibleElements.add("Ground");

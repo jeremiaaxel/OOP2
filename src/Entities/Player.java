@@ -165,8 +165,28 @@ public class Player extends MapObject implements Serializable {
 
     public Tile getPlayerPosition() { return this.currentPosition; }
 
-    public void showCommands() {
-        println("commandnya apa weh");
+    public void showCommands(Graphics2D g, int x, int y) {
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+        g.drawString("Command List : ",x,y);
+
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 15));
+        g.drawString("1    :  List Skill Player", x + 15,y+30);
+        g.drawString("2    :  Player Info", x + 15,y+50);
+        g.drawString("3    :  Wild Engimon List", x + 15,y+70);
+        g.drawString("4    :  Owned Engimon List", x + 15,y+90);
+        g.drawString("5    :  Switch Active Engimon", x + 15,y+110);
+        g.drawString("6    :  Rename Engimon", x + 15,y+130);
+        g.drawString("7    :  Drop Inventory Items", x + 15,y+150);
+        g.drawString("8    :  Engimon Details", x + 15,y+170);
+        g.drawString("9    :  Breeding", x + 15,y+190);
+        g.drawString("10   :  List Skill Player", x + 15,y+210);
+        g.drawString("s    :  Save Game", x + 15,y+230);
+        g.drawString("h    :  Command List", x + 15,y+250);
+        g.drawString("i    :  Interact", x + 15,y+270);
+        g.drawString("esc  :  Quit", x + 15,y+290);
+        g.drawString("space:  Battle", x + 15,y+310);
+
     }
 
     /* ************ ENGIMON ************ */
@@ -220,8 +240,11 @@ public class Player extends MapObject implements Serializable {
         this.getActiveEngimon().setTilePosition(tile);
     }
 
-    public void interact() {
-        println("[" + this.getActiveEngimon().getEngimonName() + "] : " + this.getActiveEngimon().getMessageUnik());
+    public void interact(Graphics2D g, int x, int y) {
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 15));
+        g.drawString("Interact with active engimon",x,y);
+        g.drawString("[" + this.getActiveEngimon().getEngimonName() + "] : \n" + this.getActiveEngimon().getMessageUnik(),x,y+30);
     }
 
     public void showOwnedEngimons() {
@@ -596,28 +619,21 @@ public class Player extends MapObject implements Serializable {
         return this.ownedEngimon;
     }
 
-    public void draw_listEngimon(Graphics2D g){
-        g.setColor(new Color(255,217,179));
-        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
-        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
+    public void draw_listEngimon(Graphics2D g) {
+        int x = (map.getNumberOfColumn()-2) * map.getTilesize();
 
-        g.setColor(new Color(255,217,179));
+        g.setColor(new Color(255, 217, 179));
         g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
 
-        g.drawString("* Daftar Engimon Player :",map.getNumberOfColumn()*map.getTilesize()-20,100);
-        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
-        for (int i =0; i < this.getOwnedEngimonSize(); i++){
-            g.drawString(this.getOwnedEngimon().getItem(i).getEngimonName(),map.getNumberOfColumn() * map.getTilesize()+20,125+(25*i));
-            //g.drawString(getActiveEngimonId(),map.getNumberOfColumn() * map.getTilesize()+20,125+(25*i));
+        g.drawString("Daftar Engimon Player :", x + 20, 100);
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
+        for (int i = 0; i < getOwnedEngimonSize(); i++) {
+            g.drawString(" ID : " + i + " - "+getOwnedEngimon().getItem(i).getEngimonName(),
+                    x + 35, 125 + (25 * i));
         }
-
     }
 
     public void draw_Player(Graphics2D g){
-        g.setColor(new Color(255,217,179));
-        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
-        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
-
         g.setColor(new Color(255,217,179));
         g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
 
@@ -635,11 +651,7 @@ public class Player extends MapObject implements Serializable {
 
     public void draw_Skill(Graphics2D g){
         g.setColor(new Color(255,217,179));
-        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
-        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
-
-        g.setColor(new Color(255,217,179));
-        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 18));
 
         g.drawString("* Active Engimon :",map.getNumberOfColumn()*map.getTilesize()-20,100);
         g.drawString(this.getActiveEngimon().getEngimonName(),map.getNumberOfColumn()*map.getTilesize(),125);

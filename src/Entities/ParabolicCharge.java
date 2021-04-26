@@ -8,7 +8,7 @@ public class ParabolicCharge extends Skill {
         super();
         name = "Parabolic Charge";
         basePower = 20;
-        masteryLevel = 10;
+        masteryLevel = 2;
         compatibleElements.add("Electric");
         compatibleElements.add("Fire");
     }

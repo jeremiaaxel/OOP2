@@ -11,7 +11,6 @@ public class GameStateManager {
     public static final int MENUSTATE = 0;
     public static final int NEWGAME = 1;
     public static final int LOADGAME = 2;
-    public static final int HELP = 3;
 
     public GameStateManager(){
         gameStates = new ArrayList<GameState>();

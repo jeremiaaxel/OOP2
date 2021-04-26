@@ -6,9 +6,9 @@ public class Liquidation extends Skill {
     
     public Liquidation(){
         super();
-        name = "Parabolic Charge";
+        name = "Liquidation";
         basePower = 85;
-        masteryLevel = 10;
+        masteryLevel = 1;
         compatibleElements.add("Water");
         compatibleElements.add("Ice");
         compatibleElements.add("Ground");

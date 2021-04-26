@@ -8,7 +8,7 @@ public class BubbleBeam extends Skill {
         super();
         name = "Bubble Beam";
         basePower = 65;
-        masteryLevel = 20;
+        masteryLevel = 2;
         compatibleElements.add("Water");
         compatibleElements.add("Ice");
         compatibleElements.add("Ground");

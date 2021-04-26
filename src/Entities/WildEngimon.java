@@ -197,13 +197,13 @@ public class WildEngimon implements Serializable {
 
     public void draw_WildEngimon(Graphics2D g){
         g.setColor(new Color(255,217,179));
-        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 15));
 
         g.drawString("Daftar Wild Engimon :",map.getNumberOfColumn()*map.getTilesize()-40,100);
         ArrayList<Engimon> b = this.getWildEngimonList();
-        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 13));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 11));
         for (int i =0; i < this.getWildEngimonList().size(); i++){
-            g.drawString(""+b.get(i).getEngimonName(),map.getNumberOfColumn() * map.getTilesize(),125+(45*i));
+            g.drawString(""+b.get(i).getEngimonName(),map.getNumberOfColumn() * map.getTilesize(),123+(45*i));
             g.drawString(String.format("Level : %d | Exp : %d",b.get(i).getEngimonLevel(), b.get(i).getEngimonExp()),map.getNumberOfColumn()*map.getTilesize(),145+(45*i));
         }
 

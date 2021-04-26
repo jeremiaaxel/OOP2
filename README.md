@@ -11,23 +11,23 @@ Repositori Untuk Tugas Besar 2 Pemrograman Berbasis Objek Teknik Informatika ITB
 7. Lalu run program
 
 ## Command
-Key Up : Bergerak ke atas
-Key Down : Bergerak ke bawah
-Key Left : Bergerak ke kiri
-Key Right : Bergerak ke kiri
+- Key Up : Bergerak ke atas
+- Key Down : Bergerak ke bawah
+- Key Left : Bergerak ke kiri
+- Key Right : Bergerak ke kiri
 
-1 : List Skill (otw Nabila)
-2 : Info player dan active engimon
-3 : List wild engimon
-4 : List owned engimon
-5 : Switch active engimon
-6 : Rename skill
-7 : Drop skill/engimon
-8 : Detail suatu engimon
-9 : Breeding
+- 1 : List Skill (otw Nabila)
+- 2 : Info player dan active engimon
+- 3 : List wild engimon
+- 4 : List owned engimon
+- 5 : Switch active engimon
+- 6 : Rename skill
+- 7 : Drop skill/engimon
+- 8 : Detail suatu engimon
+- 9 : Breeding
 
-s : Save
-escape : Quit
+- s : Save
+- escape : Quit
 
 ## Development Link
 [Spesifikasi](https://drive.google.com/file/d/1pRknrK0FlWOdSy-XedLt_cxhvH2SOPi2/view)\

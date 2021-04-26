@@ -14,7 +14,7 @@ public abstract class Engimon extends MapObject implements Serializable {
     protected Skill[] engimonSkill;
     protected String[] engimonElement;
     protected int engimonLevel;
-    protected final int engimonLife = 3;
+    protected int engimonLife;
     protected int engimonExperience;
     protected int engimonCumulativeExp;
     protected Tile currentPosition;
@@ -42,6 +42,7 @@ public abstract class Engimon extends MapObject implements Serializable {
         this.numberOfSkill = 0;
         this.numberOfElement = 0;
         this.moveDistance = this.map.getTilesize();
+        this.engimonLife = 1;
 
         width -= 5;
         height -= 5;
@@ -94,6 +95,9 @@ public abstract class Engimon extends MapObject implements Serializable {
     public void setWild(boolean wild){
         if (this.wild != wild){
             this.wild = wild;
+            if (!wild){
+                engimonLife = 3;
+            }
             loadImg();
         }
     }
@@ -236,6 +240,45 @@ public abstract class Engimon extends MapObject implements Serializable {
         System.out.println();
     }
 
+    public void draw_infoengimon(Graphics2D g){
+        int x = (map.getNumberOfColumn()-2)*map.getTilesize()+30;
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
+        g.drawString("Info Engimon",x,60);
+
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 13));
+        //nama
+        g.drawString("Nama     :" + getEngimonName(), x, 100 );
+        //spesies
+        g.drawString("Spesies  :" + getEngimonSpesies(),x, 120 );
+        //element belom ada getter element
+        g.drawString("Element  : ", x, 140 );
+        drawInfoElement(g, x+10, 155);
+        g.drawString(String.format("Parent : "), x, 180 );
+        getEngimonParent().displayInfo(g,x+10,195);
+        //life
+        g.drawString(String.format("Life : %d ",getEngimonLife()), x, 235 );
+        //level
+        g.drawString(String.format("Level : %d ", getEngimonLevel()), x, 255 );
+        //exp
+        g.drawString(String.format("Exp : %d ", getEngimonExp()), x, 275 );
+        // cumulative exp
+        g.drawString(String.format("Max Cumulative Exp : %d ", getCumulativeExp()), x, 295 );
+        //skill
+        g.drawString("Skill : ", x, 315);
+        for (int j = 1; j <= getNumberOfSkill(); j++) {
+            g.drawString("- " + getNthEngimonSkill(j).getName(), x + 10, 315 + (15 * j));
+        }
+    }
+
+
+    public void drawInfoElement(Graphics2D g, int x, int y){
+        for(int a = 1; a <= getNumberOfElement(); a++) {
+            g.drawString(getNthEngimonElement(a), x, y+((a-1)*15));
+        }
+
+    }
+
     public void move(){
         if (left){
             xtemp -= moveDistance;
@@ -304,7 +347,7 @@ public abstract class Engimon extends MapObject implements Serializable {
 
     public void displayEngimonInfo(){
         System.out.println("Name                   : " + getEngimonName());
-        System.out.print("Parent                 : "); engimonParent.displayInfo();
+//        System.out.print("Parent                 : "); engimonParent.displayInfo();
         System.out.print("Skill                  : "); displayAllEngimonSkillName();;
         System.out.print("Element                : "); displayAllEngimonElement();System.out.println();
         System.out.println("Level                  : " + getEngimonLevel());

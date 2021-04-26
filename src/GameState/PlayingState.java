@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
@@ -24,6 +22,9 @@ public class PlayingState extends GameState {
     private final long spawnDelay = 8000;
     private long startTime;
     private int panelstate;
+
+    private int intInput;
+    private String stringInput;
 
 
     public PlayingState(GameStateManager gameStateManager, boolean newgame){
@@ -164,13 +165,15 @@ public class PlayingState extends GameState {
             case 4 :
                 player.draw_listEngimon(g);
                 break;
+            case 5 :
+                player.getEngimon(intInput).draw_infoengimon(g);
+                break;
             default:
                 break;
         }
     }
 
     public synchronized void keyPressed(int key){
-        int id;
         switch (key) {
             case KeyEvent.VK_SPACE:
 //                doBattle();
@@ -189,7 +192,6 @@ public class PlayingState extends GameState {
                 break;
             case KeyEvent.VK_S:
                 savegame();
-                print(player.getPlayerPosition().getAbsis() + ", " + player.getPlayerPosition().getOrdinat());
                 commandQuit();
                 break;
             case KeyEvent.VK_1:
@@ -205,40 +207,40 @@ public class PlayingState extends GameState {
                 panelstate = 4;
                 break;
             case KeyEvent.VK_5:
-                //check and switch active engimon
+                //switch active engimon
                 panelstate = 2;
-                id = getIntInput(player.getListIdEng(),
+                intInput = getIntInput(player.getListIdEng(),
                         "Masukkan ID engimon","Switch Active Engimon");
-                player.switchActiveEngimon(id);
+                player.switchActiveEngimon(intInput);
                 break;
             case KeyEvent.VK_6:
                 // rename engimon
-                id = getIntInput(player.getListIdEng(),
+                intInput = getIntInput(player.getListIdEng(),
                         "Masukkan ID engimon","Rename Engimon");
                 String new_name = getStrInput("Masukkan nama baru untuk engimon mu",
                         "Rename Engimon");
-                player.getEngimon(id).setEngimonName(new_name);
+                player.getEngimon(intInput).setEngimonName(new_name);
                 break;
             case KeyEvent.VK_7:
                 // melepas skill/engimon
-                id = getIntInput(new Object[]{1,2},
+                intInput = getIntInput(new Object[]{1,2},
                         "Pilih jenis item yang akan dilepas\n1 : Skill\n2 : Engimon)",
                         "Show Engimon Details");
-                if (id == 1){
+                if (intInput == 1){
                     // tampilin option list id skill dulu
 //                    player.throwSomeSkillItems(player.getSkillItem(),id);
                 } else{
-                    id = getIntInput(player.getListIdEng(),
+                    intInput = getIntInput(player.getListIdEng(),
                             "Pilih ID Engimon yang akan dilepas\n1 : Skill\n2 : Engimon)",
                             "Show Engimon Details");
-                    player.freeTheEngimon(id);
+                    player.freeTheEngimon(intInput);
                 }
                 break;
             case KeyEvent.VK_8:
                 // detail suatu engimon
-                id = getIntInput(player.getListIdEng(),
+                intInput = getIntInput(player.getListIdEng(),
                         "Masukkan ID engimon","Show Engimon Details");
-//                player.showDetails(id);
+                panelstate = 5;
                 break;
             case KeyEvent.VK_9:
                 //Breeding
@@ -252,7 +254,6 @@ public class PlayingState extends GameState {
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
             default:
-
                 break;
         }
     }
@@ -267,7 +268,7 @@ public class PlayingState extends GameState {
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 possibilities,
-                "ham");
+                "");
         return s;
     }
 

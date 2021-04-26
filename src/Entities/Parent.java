@@ -1,5 +1,6 @@
 package Entities;
 
+import java.awt.*;
 import java.io.Serializable;
 
 public class Parent implements Serializable {
@@ -31,8 +32,8 @@ public class Parent implements Serializable {
         return result;
     }
 
-    void displayInfo(){
-        System.out.print(parent1name +" (Spesies " + parent1species + "'), ");
-        System.out.println(parent2name +" (Spesies " + parent2species + "'), ");
+    void displayInfo(Graphics2D g, int x, int y){
+        g.drawString(String.format("%s : (Spesies %s) ",parent1name,parent1species), x, y );
+        g.drawString(String.format("%s : (Spesies %s) ",parent2name,parent2species), x, y+15);
     }
 }

@@ -195,11 +195,7 @@ public class WildEngimon implements Serializable {
         return wildEngimonList;
     }
 
-    public void draw_WildEngimon(Graphics2D g,int w, int h){
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(102,51,0));
-        g2.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
-
+    public void draw_WildEngimon(Graphics2D g){
         g.setColor(new Color(255,217,179));
         g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
         g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);

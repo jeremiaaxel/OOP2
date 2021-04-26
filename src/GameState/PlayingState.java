@@ -3,6 +3,7 @@ package GameState;
 import Entities.*;
 import Game.GamePanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
@@ -145,18 +146,23 @@ public class PlayingState extends GameState {
     public void viewPanel(Graphics2D g){
         int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
         int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
+
+        Graphics2D g2 = g;
+        g.setColor(new Color(102,51,0));
+        g.fillRect((map.getNumberOfColumn()-2)*map.getTilesize(),0,panelWidth,panelHeight);
+
         switch (panelstate){
             case 1 :
-                player.draw_Skill(g, panelWidth, panelHeight);
+                player.draw_Skill(g);
                 break;
             case 2 :
-                player.draw_Player(g, panelWidth, panelHeight);
+                player.draw_Player(g);
                 break;
             case 3 :
-                wildEngimon.draw_WildEngimon(g, panelWidth, panelHeight);
+                wildEngimon.draw_WildEngimon(g);
                 break;
             case 4 :
-                player.draw_listEngimon(g, panelWidth, panelHeight);
+                player.draw_listEngimon(g);
                 break;
             default:
                 break;
@@ -192,23 +198,38 @@ public class PlayingState extends GameState {
                 panelstate = 2;
                 break;
             case KeyEvent.VK_3:
-                //switch active engimon
-                //int test = 2;
-                //player.switchActiveEngimon(2);
-                //player.getActiveEngimon().displayEngimonInfo();
                 panelstate =3;
                 break;
             case KeyEvent.VK_4:
                 panelstate = 4;
                 break;
             case KeyEvent.VK_5:
-                panelstate = 5;
+                //switch active engimon
+                player.setIdle(true);
+                int id = getIntInput(player.getListIdEng(),
+                        "Masukkan ID engimon","Switch Active Engimon");
+                player.switchActiveEngimon(id);
                 break;
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
             default:
                 break;
         }
+    }
+
+    public int getIntInput(Object[] possibilities, String message, String title){
+        JFrame f = new JFrame();
+        int s = (int) JOptionPane.showInputDialog(
+                f,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                possibilities,
+                "ham");
+
+        //If a string was returned, say so.
+        return s;
     }
 
     public synchronized void commandQuit() {
@@ -270,10 +291,10 @@ public class PlayingState extends GameState {
             print("Something went wrong [draw]");
         } else {
             // clear screen
-            g.setColor(Color.BLACK);
-            int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
-            int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
-            g.fillRect((map.getNumberOfColumn()-2) * map.getTilesize(),0,panelWidth, panelHeight);
+//            g.setColor(Color.BLACK);
+//            int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
+//            int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
+//            g.fillRect((map.getNumberOfColumn()-2) * map.getTilesize(),0,panelWidth, panelHeight);
 
             // draw map
             map.drawMap(g);

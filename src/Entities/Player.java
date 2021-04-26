@@ -172,7 +172,7 @@ public class Player extends MapObject implements Serializable {
     /* ************ ENGIMON ************ */
     public void addEngimon(Engimon eng) {
         try {
-            eng.setSymbol('X');
+            eng.setSymbol('x');
             eng.setWild(false);
             this.ownedEngimon.add(eng);
         } catch (Exception e) {
@@ -297,7 +297,6 @@ public class Player extends MapObject implements Serializable {
             } catch (Exception e) {
                 println(e.getMessage());
             }
-
         }
     }
 
@@ -597,11 +596,7 @@ public class Player extends MapObject implements Serializable {
         return this.ownedEngimon;
     }
 
-    public void draw_listEngimon(Graphics2D g,int w, int h){
-        Graphics2D g2 = (Graphics2D) g;
-        g.setColor(new Color(102,51,0));
-        g.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
-
+    public void draw_listEngimon(Graphics2D g){
         g.setColor(new Color(255,217,179));
         g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
         g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
@@ -618,11 +613,7 @@ public class Player extends MapObject implements Serializable {
 
     }
 
-    public void draw_Player(Graphics2D g,int w, int h){
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(102,51,0));
-        g2.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
-
+    public void draw_Player(Graphics2D g){
         g.setColor(new Color(255,217,179));
         g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
         g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
@@ -642,11 +633,7 @@ public class Player extends MapObject implements Serializable {
         g.drawString(String.format("%d",this.getActiveEngimon().getEngimonExp()),map.getNumberOfColumn()*map.getTilesize(),375);
     }
 
-    public void draw_Skill(Graphics2D g,int w, int h){
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(102,51,0));
-        g2.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
-
+    public void draw_Skill(Graphics2D g){
         g.setColor(new Color(255,217,179));
         g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
         g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
@@ -677,8 +664,14 @@ public class Player extends MapObject implements Serializable {
             if(c[i].getMasteryLevel() == 20) {
 
             }
-            //g.drawString(c[i].g,map.getNumberOfColumn()*map.getTilesize(),200+(25*i));
         }
+    }
 
+    public Object[] getListIdEng(){
+        Object[] list = new Object[getOwnedEngimonSize()];
+        for (int i = 0; i < getOwnedEngimonSize(); i++) {
+            list[i] = i;
+        }
+        return list;
     }
 }

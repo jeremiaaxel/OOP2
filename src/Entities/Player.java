@@ -304,14 +304,10 @@ public class Player extends MapObject implements Serializable {
         return this.ownedSkill.getItem(index);
     }
 
-    public void useSkillItem(Skill item) {
+    public void useSkillItem(Skill item) throws Exception {
         int itemIndex = isSkillOwned(item);
         if (itemIndex != -1) {
-            try {
-                this.getActiveEngimon().addSkill(item);
-            } catch (Exception e) {
-                println(e.getMessage());
-            }
+            this.getActiveEngimon().addSkill(item);
             decrSkillCounter(itemIndex);
             this.ownedSkill.decrUsed();
 
@@ -496,7 +492,6 @@ public class Player extends MapObject implements Serializable {
 
     public void draw(Graphics2D g){
         // draw player
-        System.out.println("pos " + currentPosition.getAbsis()+","+currentPosition.getOrdinat());
         if (left || right || up || down){
             g.drawImage(animation.getImage(),
                     (int) (x),

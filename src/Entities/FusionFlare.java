@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class FusionFlare extends Skill {
+public class FusionFlare extends Skill implements Serializable {
     
     public FusionFlare(){
         super();

@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Araquanid extends Engimon{
+public class Araquanid extends Engimon implements Serializable {
     
     public Araquanid(String name, Parent parent, Tile position, Map map){
         super('w',name,"Araquanid",parent,position,map);

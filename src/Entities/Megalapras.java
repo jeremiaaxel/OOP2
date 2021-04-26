@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Megalapras extends Engimon{
+public class Megalapras extends Engimon implements Serializable {
     
     public Megalapras(String name, Parent parent, Tile position,Map map){
         super('s',name,"Megalapras",parent,position,map);

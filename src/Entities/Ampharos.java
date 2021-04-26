@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Ampharos extends Engimon{
+public class Ampharos extends Engimon  implements Serializable {
     
     public Ampharos(String name, Parent parent, Tile position, Map map){
         super('e',name,"Ampharos",parent,position,map);

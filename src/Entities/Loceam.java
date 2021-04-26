@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Loceam extends Engimon{
+public class Loceam extends Engimon implements Serializable {
     
     public Loceam(String name, Parent parent, Tile position, Map map){
         super('l',name,"Loceam",parent,position, map);

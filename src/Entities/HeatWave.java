@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class HeatWave extends Skill {
+public class HeatWave extends Skill implements Serializable {
     
     public HeatWave(){
         super();

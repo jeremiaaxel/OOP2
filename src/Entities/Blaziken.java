@@ -3,9 +3,10 @@ package Entities;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Blaziken extends Engimon{
+public class Blaziken extends Engimon implements Serializable {
     
     public Blaziken(String name, Parent parent, Tile position, Map map){
         super('f',name,"Blaziken",parent,position,map);
@@ -13,7 +14,7 @@ public class Blaziken extends Engimon{
         try {
             super.addSkill(new HeatWave());
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("Err : " + e.getMessage());
         }
         super.setMessageUnik("Blazz Blazz");
     }

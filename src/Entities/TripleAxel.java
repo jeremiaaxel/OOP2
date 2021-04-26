@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class TripleAxel extends Skill{
+public class TripleAxel extends Skill implements Serializable {
     
     public TripleAxel(){
         super();

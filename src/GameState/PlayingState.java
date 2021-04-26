@@ -10,9 +10,10 @@ import java.io.*;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PlayingState extends GameState {
-
     private Map map = new Map();
     private Player player;
     private WildEngimon wildEngimon;
@@ -34,11 +35,11 @@ public class PlayingState extends GameState {
         this.startTime = System.nanoTime();
     }
 
-
     private void print(Object obj, Object end) {
         System.out.print(obj);
         System.out.print(end);
     }
+
     private void print(Object obj) {
         System.out.println(obj);
     }
@@ -50,28 +51,66 @@ public class PlayingState extends GameState {
             String map_text = map.parse("data/map.txt");
             this.map = new Map(15, 19, map_text);
             this.map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
-            System.out.println("size" + this.map.getTilesize());
+
+            // DEBUG
+            System.out.println("size " + this.map.getTilesize());
+
+            this.wildEngimon = new WildEngimon(10,map);
 
             if (newgame) {
                 this.player = new Player("New Player", map);
-                this.wildEngimon = new WildEngimon(10,map);
+                wildEngimon.init();
                 playerInit();
+                print("Owned Engimons " + this.player.getOwnedEngimonSize());
             } else {
                 playerLoad();
-
                 // load resources
-                for (int i = 0; i < wildEngimon.getNumberOfWildEngimon(); i++) {
-                    wildEngimon.getNthEngimon(i).loadImg();
-                }
-                player.getActiveEngimon().loadImg();
+
+                // DEBUG
+                print("wildEngimons qnty " + wildEngimon.getNumberOfWildEngimon());
             }
 
+            player.getActiveEngimon().loadImg();
             player.loadSprites();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void loadWildEngimon(Engimon currEng) {
+        if (currEng.getEngimonSpesies() == "Aggron"){
+            currEng = new Aggron(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Ampharos"){
+            currEng = new Ampharos(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Araquanid"){
+            currEng = new Araquanid(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Blaziken"){
+            currEng = new Blaziken(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Eiscue"){
+            currEng = new Eiscue(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Loceam"){
+            currEng = new Loceam(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Megalapras"){
+            currEng = new Megalapras(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+        else if (currEng.getEngimonSpesies() == "Meganium"){
+            currEng = new Meganium(currEng.getEngimonName(), currEng.getEngimonParent(), currEng.getCurrentPosition(), this.map);
+        }
+
+        if (currEng != null) {
+            this.wildEngimon.addWildEngimon(currEng);
+        } else {
+            // DEBUG
+            print("PlayingState.java:106 currEng error");
+        }
     }
 
      public synchronized void playerInit(){
@@ -97,6 +136,14 @@ public class PlayingState extends GameState {
         dataPath = dataPath.concat("/"+dirpath);
         try {
             // Make player load
+//            FileInputStream fileIn = new FileInputStream(dataPath.concat("/" + "gamestate.txt"));
+//            ObjectInputStream in = new ObjectInputStream(fileIn);
+//            this = (PlayingState) in.readObject();
+//            in.close();
+//            fileIn.close();
+//
+//            print("Game state done");
+
             FileInputStream fileIn = new FileInputStream(dataPath.concat("/" + "player.txt"));
             ObjectInputStream in = new ObjectInputStream(fileIn);
             this.player = (Player) in.readObject();
@@ -108,9 +155,21 @@ public class PlayingState extends GameState {
             // Make wild engimon load
             fileIn = new FileInputStream(dataPath.concat("/" + "wildengimons.txt"));
             in = new ObjectInputStream(fileIn);
-            wildEngimon = (WildEngimon) in.readObject();
+            WildEngimon wileng = (WildEngimon) in.readObject();
             in.close();
             fileIn.close();
+      /*for (int i = 0; i < wil.getNumberOfWildEngimon(); i++) {
+                wildEngimon.addWildEngimon(new Engimon(wil.getNthEngimon(i)));
+            }*/
+
+            for (int i = 0; i < wileng.getNumberOfWildEngimon(); i++) {
+                loadWildEngimon(wileng.getNthEngimon(i));
+                // DEBUG
+//                print("wildEngimons " + wildEngimon.getNthEngimon(i).getNthEngimonElement(1));
+                wildEngimon.getNthEngimon(i).graphIndicatingElmt();
+                wildEngimon.getNthEngimon(i).loadImg();
+            }
+
             print("Wild Engimon done");
 
         } catch (IOException | ClassNotFoundException e) {
@@ -207,7 +266,7 @@ public class PlayingState extends GameState {
                 panelstate = 2;
                 break;
             case KeyEvent.VK_3:
-                panelstate =3;
+                panelstate = 3;
                 break;
             case KeyEvent.VK_4:
                 panelstate = 4;
@@ -256,9 +315,27 @@ public class PlayingState extends GameState {
                 this.player.getEngimon(id2).setLevel(5);
                 player.breed(id1, id2, this.player);
                 break;
+            case KeyEvent.VK_0:
+                // Learn Skill
+                // Udah aman harusnya
+                // Get nama-nama skill yang dipunya
+                List<String> ownedSkill = new ArrayList<>();
+                for (int i=0; i < this.player.getOwnedSkillItemSize(true); i++) {
+                    ownedSkill.add(i + " - " + this.player.getSkillItem(i).getName());
+                }
 
+                int pilihan = Integer.parseInt(String.valueOf(getStrInputDropDown(ownedSkill.toArray(), "Masukan skill item yang ingin dipelajari", "Learn Skill Item").charAt(0)));
+                try {
+                    player.useSkillItem(player.getSkillItem(pilihan));
+                } catch (Exception e) {
+                    // GAGAL; antara udah punya skillnya atau skillnya udah penuh
+                    e.printStackTrace();
+                    print(e.getMessage());
+                }
+                break;
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
+                break;
             default:
                 break;
         }
@@ -292,7 +369,26 @@ public class PlayingState extends GameState {
         return s;
     }
 
+    public String getStrInputDropDown(Object[] options, String message, String title){
+        player.setIdle(true);
+        JFrame f = new JFrame();
+        String s = (String) JOptionPane.showInputDialog(
+                f,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                "");
+        return s;
+    }
+
     public synchronized void commandQuit() {
+//        this.map = null;
+//        this.player = null;
+//        this.wildEngimon = null;
+//        this.map = null;
+
         this.gameStateManager.setGameStates(GameStateManager.MENUSTATE);
     }
 
@@ -384,6 +480,11 @@ public class PlayingState extends GameState {
     }
 
     public synchronized void savegame() {
+        this.player.setLeft(false);
+        this.player.setRight(false);
+        this.player.setUp(false);
+        this.player.setDown(false);
+
         String dataPath = "data";
         print("Nama file penyimpanan : ", "");
         Scanner scanner = new Scanner(System.in);
@@ -396,6 +497,15 @@ public class PlayingState extends GameState {
             // Make folder
             File folderOut = new File(dataPath);
             boolean dirCreated = folderOut.mkdir();
+
+
+//            // Make player save
+//            FileOutputStream fileOut = new FileOutputStream(dataPath.concat("/" + "gamestate.txt"));
+//            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+//            out.writeObject(this);
+//            out.close();
+//            fileOut.close();
+//            print("Game state done");
 
             // Make player save
             FileOutputStream fileOut = new FileOutputStream(dataPath.concat("/" + "player.txt"));

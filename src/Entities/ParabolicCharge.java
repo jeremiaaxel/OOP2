@@ -1,8 +1,9 @@
 package Entities;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class ParabolicCharge extends Skill {
+public class ParabolicCharge extends Skill implements Serializable {
     
     public ParabolicCharge(){
         super();

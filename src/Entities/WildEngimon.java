@@ -19,7 +19,7 @@ public class WildEngimon implements Serializable {
         wildEngimonList = new ArrayList<>();
         capacity = 12;
         this.map = map;
-        delayToMove = 800;
+        delayToMove = 100;
         delayToLevelUp = 5000;
         init();
     }
@@ -104,7 +104,6 @@ public class WildEngimon implements Serializable {
                     this.getNthEngimon(engimon_id).setLeft(true);
                     break;
                 default:
-//                    System.out.println("random move default");
                     break;
             }
             this.getNthEngimon(engimon_id).move();

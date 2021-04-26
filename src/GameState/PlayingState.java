@@ -55,13 +55,16 @@ public class PlayingState extends GameState {
             this.map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
 
             this.wildEngimon = new WildEngimon(10,map);
+            this.player = new Player("New Player", map);
 
             if (newgame) {
-                this.player = new Player("New Player", map);
                 wildEngimon.init();
                 playerInit();
             } else {
-                playerLoad();
+
+                String[] filenames = getFilenames();
+                stringInput = getStrInputDropDown(filenames, "File ?", "Load Game");
+                playerLoad(stringInput);
             }
 
             player.getActiveEngimon().loadImg();
@@ -71,6 +74,17 @@ public class PlayingState extends GameState {
             e.printStackTrace();
         }
 
+    }
+
+    private String[] getFilenames() {
+        String dirPath = "data";
+        File file = new File(dirPath);
+        return file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return !name.endsWith(".txt");
+            }
+        });
     }
 
     public void loadWildEngimon(Engimon currEng) {
@@ -126,13 +140,9 @@ public class PlayingState extends GameState {
          this.player.addSkillItem(new FusionFlare());
     }
 
-    public synchronized void playerLoad(){
+    public synchronized void playerLoad(String stringInput){
         String dataPath = "data";
-        print("Nama file penyimpanan : ", "");
-        Scanner scanner = new Scanner(System.in);
-//        String dirpath = scanner.nextLine();
-        String dirpath = "test1";
-        dataPath = dataPath.concat("/"+dirpath);
+        dataPath = dataPath.concat("/"+stringInput);
         try {
             // Make player load
 //            FileInputStream fileIn = new FileInputStream(dataPath.concat("/" + "gamestate.txt"));
@@ -266,7 +276,8 @@ public class PlayingState extends GameState {
                 this.player.setRight(true);
                 break;
             case KeyEvent.VK_S:
-                savegame();
+                stringInput = getStrInput("Nama file?", "Save Game");
+                savegame(stringInput);
                 commandQuit();
                 break;
             case KeyEvent.VK_1:
@@ -510,7 +521,7 @@ public class PlayingState extends GameState {
         }
     }
 
-    public synchronized void savegame() {
+    public synchronized void savegame(String stringInput) {
         this.player.setLeft(false);
         this.player.setRight(false);
         this.player.setUp(false);
@@ -518,10 +529,7 @@ public class PlayingState extends GameState {
 
         String dataPath = "data";
         print("Nama file penyimpanan : ", "");
-        Scanner scanner = new Scanner(System.in);
-//        String dirpath = scanner.nextLine();
-        String dirpath = "test1";
-        dataPath = dataPath.concat('/' + dirpath);
+        dataPath = dataPath.concat('/' + stringInput);
         print(dataPath);
 
         try {

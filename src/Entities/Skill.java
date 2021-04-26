@@ -11,7 +11,7 @@ public class Skill implements Serializable {
     protected int basePower;
     protected int masteryLevel;
     protected Vector<String> compatibleElements;
-    protected BufferedImage iconSkill;
+    protected transient BufferedImage iconSkill;
     protected String backgroundPath;
 
     public void loadImage(){

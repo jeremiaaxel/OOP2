@@ -23,7 +23,6 @@ public class WildEngimon implements Serializable {
         delayToLevelUp = 5000;
         init();
     }
-
     public WildEngimon(int capacity, Map map){
         wildEngimonList = new ArrayList<>();
         this.capacity = capacity;
@@ -43,11 +42,11 @@ public class WildEngimon implements Serializable {
     }
 
     public void init(){
-        Engimon wild1 = new Blaziken("wild blaziken", new Parent(), map.getTile(3,15),map);
+        Engimon wild1 = new Blaziken("wild blaziken", new Parent(), map.getTile(3,13),map);
         Engimon wild2 = new Ampharos("wild ampharos", new Parent(), map.getTile(1,3),map);
         Engimon wild3 = new Aggron("wild aggron", new Parent(), map.getTile(5,5),map);
         Engimon wild4 = new Araquanid("wild araquanid", new Parent(),map.getTile(12,2),map);
-        Engimon wild5 = new Eiscue("wild eiscue", new Parent(),map.getTile(10,14),map);
+        Engimon wild5 = new Eiscue("wild eiscue", new Parent(),map.getTile(10,12),map);
         addWildEngimon(wild1);
         addWildEngimon(wild2);
         addWildEngimon(wild3);
@@ -138,6 +137,10 @@ public class WildEngimon implements Serializable {
         return wildEngimonList.get(n);
     }
 
+    public boolean isFull(){
+        return capacity == getNumberOfWildEngimon();
+    }
+
     public void update(Player player){
         giveExp(100);
         randomMove();
@@ -153,7 +156,9 @@ public class WildEngimon implements Serializable {
             }
         }
         for (Engimon eng : engToDelete){
+            map.setTileOcc(eng.y_map,eng.x_map, Map.NO_OCCUPIER);
             wildEngimonList.remove(eng);
+            eng = null;
         }
     }
 

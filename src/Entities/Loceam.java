@@ -1,5 +1,8 @@
 package Entities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.util.Vector;
 
 public class Loceam extends Engimon{
@@ -14,6 +17,18 @@ public class Loceam extends Engimon{
             System.out.println(e.getMessage());
         }
         super.setMessageUnik("Loceee Loceee");
+    }
+
+    public void loadImg(){
+        try {
+            animation = new Animation();
+            BufferedImage[] b = new BufferedImage[1];
+            b[0] = ImageIO.read(new FileInputStream("resources/loceam.png"));
+            animation.setDelay(500);
+            animation.setFrames(b);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public float getAdvantage(Engimon other)throws Exception{

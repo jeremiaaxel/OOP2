@@ -207,6 +207,7 @@ public class Map implements Serializable {
     }
 
     public boolean isOccupied(int brs, int klm){
+        System.out.println(brs+"    ,    "+klm);
         return map[brs][klm].getOccupierCode() == Map.OCCUPIED;
     }
 

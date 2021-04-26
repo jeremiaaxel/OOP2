@@ -42,11 +42,12 @@ public class PlayingState extends GameState {
 
         try {
             String map_text = map.parse("data/map.txt");
-            this.map = new Map(16, 20, map_text);
+            this.map = new Map(15, 19, map_text);
             this.map.setTileSize((GamePanel.WIDTH*GamePanel.SCALE - panelSize)/ (map.getNumberOfColumn()-2));
+            System.out.println("size" + this.map.getTilesize());
 
             if (newgame) {
-                this.player = new Player("New Player", map); // NANTI MINTA NAMA DULU
+                this.player = new Player("New Player", map);
                 this.wildEngimon = new WildEngimon(10,map);
                 playerInit();
             } else {
@@ -128,13 +129,14 @@ public class PlayingState extends GameState {
                 e.printStackTrace();
             }
         }
-        player.update();
+        player.update(wildEngimon);
         wildEngimon.update(player);
         if (wildEngimon.getNumberOfWildEngimon() == 0){
             System.out.println("GAME OVER!!!");
             gameStateManager.setGameStates(gameStateManager.MENUSTATE);
         }
         spawnRandowmWildEngimon();
+//        map.displayMap();
     }
 
     public synchronized void keyPressed(int key){
@@ -190,7 +192,7 @@ public class PlayingState extends GameState {
 
     public synchronized void spawnRandowmWildEngimon(){
         long elapsed = (System.nanoTime() - startTime)/ 1000000;
-        if (elapsed > spawnDelay) {
+        if (elapsed > spawnDelay && !wildEngimon.isFull()) {
             Random rand = new Random(new Date().getTime());
             int random_speciesid = rand.nextInt(100) % 5;
             Engimon new_eng;
@@ -250,8 +252,8 @@ public class PlayingState extends GameState {
 
             // draw map
             map.drawMap(g);
-            player.draw(g);
             wildEngimon.draw(g);
+            player.draw(g);
         }
     }
 

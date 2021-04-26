@@ -41,6 +41,7 @@ public abstract class Engimon extends MapObject implements Serializable {
         this.engimonElement = new String[2];
         this.numberOfSkill = 0;
         this.numberOfElement = 0;
+        this.moveDistance = this.map.getTilesize();
 
         width -= 5;
         height -= 5;
@@ -203,6 +204,7 @@ public abstract class Engimon extends MapObject implements Serializable {
     public void updateExistence(){
         if (engimonCumulativeExp > maxCumExp ){
             isdead = true;
+            map.setTileOcc(currentPosition, Map.NO_OCCUPIER);
         }
     }
 
@@ -237,7 +239,6 @@ public abstract class Engimon extends MapObject implements Serializable {
     }
 
     public void move(){
-        moveDistance = this.map.getTilesize();
         if (left){
             xtemp -= moveDistance;
         } else if (right){
@@ -271,6 +272,13 @@ public abstract class Engimon extends MapObject implements Serializable {
         } else {
             setTilePosition(map.getTile(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)));
         }
+    }
+
+    public boolean checkCollision(){
+        if (map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp))){
+            return true;
+        }
+        return false;
     }
 
     public Boolean isTileTypeCompatible(char type){

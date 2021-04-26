@@ -58,7 +58,7 @@ public class Player extends MapObject implements Serializable {
         this.ownedSkill = new Inventory<Skill>();
         this.skillCounter = new ArrayList<Integer>();
         this.setPositionByMap(this.currentPosition.getAbsis(), this.currentPosition.getOrdinat());
-        moveDistance = 1;
+        moveDistance = 3;
     }
 
     public Player(Player playerin, Entities.Map map) {
@@ -81,8 +81,9 @@ public class Player extends MapObject implements Serializable {
         }
 
         this.setPositionByMap(this.currentPosition.getAbsis(), this.currentPosition.getOrdinat());
-        moveDistance = 1;
+        moveDistance = 3;
 
+        this.setActiveEngimonPosition(playerin.getActiveEngimon().getCurrentPosition());
         this.setActiveEngimonPosition(playerin.getActiveEngimon().getCurrentPosition());
 
         // load sprites
@@ -432,13 +433,16 @@ public class Player extends MapObject implements Serializable {
     }
 
     public void updatePosition(double xplayer, double yplayer, double xactiveEng, double yactiveEng){
-        setPlayerPosition(map.getTile(getMapRowFromOrd(yplayer),getMapColFromAbsis(xplayer)));
-        setPosition(xplayer,yplayer);
-        setActiveEngimonPosition(map.getTile(getMapRowFromOrd(yactiveEng),getMapColFromAbsis(xactiveEng)));
-        getActiveEngimon().setPosition(xactiveEng,yactiveEng);
+        if (xplayer != -1 && xactiveEng !=-1){
+//            setPlayerPosition(map.getTile(getMapRowFromOrd(yplayer),getMapColFromAbsis(xplayer)));
+            setPosition(xplayer,yplayer);
+            currentPosition = map.getTile(y_map,x_map);
+//            setActiveEngimonPosition(map.getTile(getMapRowFromOrd(yactiveEng),getMapColFromAbsis(xactiveEng)));
+            getActiveEngimon().setPosition(xactiveEng,yactiveEng);
+        }
     }
 
-    public synchronized void update(){
+    public synchronized void update(WildEngimon w){
         // update semua engimon player
         ArrayList<Engimon> engToDelete = new ArrayList<>();
         Engimon eng;
@@ -455,7 +459,7 @@ public class Player extends MapObject implements Serializable {
 
         // update position
         nextPosition();
-        handleCollision();
+        handleCollision(w);
 
         // update position
         updatePosition(xtemp,ytemp,getActiveEngimon().xtemp,getActiveEngimon().ytemp);
@@ -545,8 +549,8 @@ public class Player extends MapObject implements Serializable {
         this.setPlayerPosition(newTile);
     }
 
-    public void handleCollision(){
-        if (checkCollision()){
+    public void handleCollision(WildEngimon w){
+        if (checkCollision(w)){
             println("occupied");
             xtemp = x;
             ytemp = y;
@@ -555,13 +559,34 @@ public class Player extends MapObject implements Serializable {
         }
     }
 
-    public boolean checkCollision(){
-        boolean result = false;
-//        if (left){
-//            result = map.isOccupied(getMapRowFromOrd(ytemp-),getMapColFromAbsis(xtemp+width));
-//        } else if (up || down){
-//            result = map.isOccupied(getMapRowFromOrd(ytemp+height),getMapColFromAbsis(xtemp));
+    public boolean checkCollision(WildEngimon w){
+//        boolean result = false;
+//        for (int i = 0 ; i < w.getNumberOfWildEngimon(); i ++){
+//           if (w.getNthEngimon(i).x > xtemp && (w.getNthEngimon(i).x < (xtemp + width))){
+//               return true;
+//           } else if (w.getNthEngimon(i).x < xtemp && (w.getNthEngimon(i).x > (xtemp - width))){
+//               return true;
+//           } else if (w.getNthEngimon(i).y < ytemp && (w.getNthEngimon(i).y > (ytemp - height))){
+//               return true;
+//           } else if (w.getNthEngimon(i).y > ytemp && (w.getNthEngimon(i).y < (ytemp + height))){
+//               return true;
+//           }
 //        }
-        return result && !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map);
+        return map.isOccupied(getMapRowFromOrd(ytemp), getMapColFromAbsis(xtemp))
+                && !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map) &&
+                !(getMapRowFromOrd(ytemp) == getActiveEngimon().y_map && getMapColFromAbsis(xtemp) == getActiveEngimon().x_map);
+
+//        if (left) {
+//            result = map.isOccupied(getMapRowFromOrd(ytemp), getMapColFromAbsis(xtemp));
+//        } else if (right){
+//            result = map.isOccupied(getMapRowFromOrd(ytemp), getMapColFromAbsis(xtemp));
+//        } else if (up){
+//            result = map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp));
+//        } else if (down){
+//            result = map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp));
+////        }
+//        return map.isOccupied(getMapRowFromOrd(ytemp), getMapColFromAbsis(xtemp)) &&
+//                !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map) &&
+//                !(getMapRowFromOrd(ytemp) == getActiveEngimon().ytemp && getMapColFromAbsis(xtemp) == xtemp);
     }
 }

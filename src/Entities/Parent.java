@@ -32,6 +32,19 @@ public class Parent implements Serializable {
         return result;
     }
 
+    public String getparent1name(){
+        return this.parent1name;
+    }
+    public String getparent1species(){
+        return this.parent1species;
+    }
+    public String getparent2name(){
+        return this.parent2name;
+    }
+    public String getparent2species(){
+        return this.parent2species;
+    }
+
     void displayInfo(Graphics2D g, int x, int y){
         g.drawString(String.format("%s : (Spesies %s) ",parent1name,parent1species), x, y );
         g.drawString(String.format("%s : (Spesies %s) ",parent2name,parent2species), x, y+15);

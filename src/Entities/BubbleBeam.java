@@ -1,9 +1,8 @@
 package Entities;
 
-import java.io.Serializable;
 import java.util.Vector;
 
-public class BubbleBeam extends Skill implements Serializable {
+public class BubbleBeam extends Skill {
 
     public BubbleBeam(){
         super();
@@ -13,6 +12,19 @@ public class BubbleBeam extends Skill implements Serializable {
         compatibleElements.add("Water");
         compatibleElements.add("Ice");
         compatibleElements.add("Ground");
+        getImageBubbleSkill();
+        loadImage();
+    }
+
+    public String getImageBubbleSkill() {
+        if (masteryLevel == 1) {
+            backgroundPath = "resources/bubble_10.png";
+        } else if (masteryLevel == 2) {
+            backgroundPath = "resources/bubble_15.png";
+        }else if(masteryLevel == 3){
+            backgroundPath = "resources/bubble_20.png";
+        }
+        return backgroundPath;
     }
 
 

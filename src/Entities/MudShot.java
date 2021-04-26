@@ -1,9 +1,8 @@
 package Entities;
 
-import java.io.Serializable;
 import java.util.Vector;
 
-public class MudShot extends Skill implements Serializable {
+public class MudShot extends Skill {
 
     public MudShot(){
         super();
@@ -13,6 +12,19 @@ public class MudShot extends Skill implements Serializable {
         compatibleElements.add("Ground");
         compatibleElements.add("Water");
         compatibleElements.add("Ice");
+        getImageMudSkill();
+        loadImage();
+    }
+
+    public String getImageMudSkill() {
+        if (masteryLevel == 1) {
+            backgroundPath = "resources/mud_1.png";
+        } else if (masteryLevel == 2) {
+            backgroundPath = "resources/mud_2.png";
+        }else if(masteryLevel == 3){
+            backgroundPath = "resources/mud_3.png";
+        }
+        return backgroundPath;
     }
 
     /*public MudShot(String skillname, int basepower, int masterylevel, Vector<String> compatibleelement){

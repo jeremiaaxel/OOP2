@@ -682,4 +682,20 @@ public class Player extends MapObject implements Serializable {
         }
         return null;
     }
+
+    public void draw_Skill(Graphics2D g, int theid){
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,24));
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 12));
+
+        for(int i=0; i <this.ownedSkill.size();i++) {
+            g.drawString("* Skill :  "+ ownedSkill.getItem(i).getName(), map.getNumberOfColumn() * map.getTilesize(), 75 + (50 * (i*2)));
+            g.drawImage(ownedSkill.getItem(i).iconSkill, map.getNumberOfColumn() * map.getTilesize()-60, 75 + (50 * (i*2)), 40, 40, null);
+            g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 12));
+            g.drawString("* Base Power  :  " + String.format("%d", ownedSkill.getItem(i).getBasePower()), map.getNumberOfColumn() * map.getTilesize(), 100+ (50 * (i*2)));
+            g.drawString("* Mastery Level  :  " +String.format("%d", ownedSkill.getItem(i).getMasteryLevel()), map.getNumberOfColumn() * map.getTilesize(), 125 + (50 * (i*2)));
+        }
+    }
 }

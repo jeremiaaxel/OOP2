@@ -25,7 +25,7 @@ public class PlayingState extends GameState {
     private final long spawnDelay = 8000;
     private long startTime;
     private int panelstate;
-
+    private int id;
     private int intInput;
     private String stringInput;
 
@@ -123,9 +123,7 @@ public class PlayingState extends GameState {
         // DEBUG THROW ITEM/ENGIMON
          this.player.addSkillItem(new TripleAxel());
          this.player.addSkillItem(new ParabolicCharge());
-         this.player.addSkillItem(new ParabolicCharge());
-         this.player.addSkillItem(new ParabolicCharge());
-         this.player.addSkillItem(new ParabolicCharge());
+         this.player.addSkillItem(new FusionFlare());
     }
 
     public synchronized void playerLoad(){
@@ -220,7 +218,7 @@ public class PlayingState extends GameState {
 
         switch (panelstate){
             case 1 :
-                player.draw_Skill(g);
+                player.draw_Skill(g, id);
                 break;
             case 2 :
                 player.draw_Player(g);
@@ -273,6 +271,8 @@ public class PlayingState extends GameState {
                 break;
             case KeyEvent.VK_1:
                 panelstate = 1;
+                id = getIntInput(player.getListIdEng(),
+                        "Masukkan ID engimon","Show Engimon Skills");
                 break;
             case KeyEvent.VK_2:
                 panelstate = 2;

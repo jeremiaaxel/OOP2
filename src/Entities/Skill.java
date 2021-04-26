@@ -1,5 +1,8 @@
 package Entities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
@@ -8,6 +11,16 @@ public class Skill implements Serializable {
     protected int basePower;
     protected int masteryLevel;
     protected Vector<String> compatibleElements;
+    protected BufferedImage iconSkill;
+    protected String backgroundPath;
+
+    public void loadImage(){
+        try {
+            iconSkill = ImageIO.read(new FileInputStream(backgroundPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public Skill()
     {

@@ -14,6 +14,7 @@ public class BubbleBeam extends Skill {
         compatibleElements.add("Ground");
     }
 
+
     /*public BubbleBeam(String skillname, int basepower, int masterylevel, Vector<String> compatibleelement){
         super("Bubble Beam",65,20,compatibleelement);
     }*/

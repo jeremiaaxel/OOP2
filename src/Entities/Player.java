@@ -32,6 +32,7 @@ public class Player extends MapObject implements Serializable {
     private Inventory<Skill> ownedSkill = new Inventory<Entities.Skill>();
     private List<Integer> skillCounter = new ArrayList<>();
     private int activeEngimonId;
+    public static BufferedImage backgroundImage;
 
     private void println(Object obj) {
         System.out.println(obj);
@@ -199,6 +200,7 @@ public class Player extends MapObject implements Serializable {
     public void switchActiveEngimon(int new_eng_id) {
         if (new_eng_id != activeEngimonId){
             Tile oldActiveEngTile = new Tile();
+            this.getEngimon(new_eng_id).setPosition(getActiveEngimon().x,getActiveEngimon().y);
             oldActiveEngTile.set(this.getActiveEngimon().getCurrentPosition());
             this.setActiveEngimonId(new_eng_id);
             this.getActiveEngimon().setTilePosition(oldActiveEngTile);
@@ -439,6 +441,7 @@ public class Player extends MapObject implements Serializable {
             currentPosition = map.getTile(y_map,x_map);
 //            setActiveEngimonPosition(map.getTile(getMapRowFromOrd(yactiveEng),getMapColFromAbsis(xactiveEng)));
             getActiveEngimon().setPosition(xactiveEng,yactiveEng);
+            getActiveEngimon().setTilePosition(map.getTile(y_map,x_map));
         }
     }
 
@@ -588,5 +591,94 @@ public class Player extends MapObject implements Serializable {
 //        return map.isOccupied(getMapRowFromOrd(ytemp), getMapColFromAbsis(xtemp)) &&
 //                !(getMapRowFromOrd(ytemp) == y_map && getMapColFromAbsis(xtemp) == x_map) &&
 //                !(getMapRowFromOrd(ytemp) == getActiveEngimon().ytemp && getMapColFromAbsis(xtemp) == xtemp);
+    }
+
+    public Inventory<Engimon> getOwnedEngimon(){
+        return this.ownedEngimon;
+    }
+
+    public void draw_listEngimon(Graphics2D g,int w, int h){
+        Graphics2D g2 = (Graphics2D) g;
+        g.setColor(new Color(102,51,0));
+        g.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
+        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+
+        g.drawString("* Daftar Engimon Player :",map.getNumberOfColumn()*map.getTilesize()-20,100);
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+        for (int i =0; i < this.getOwnedEngimonSize(); i++){
+            g.drawString(this.getOwnedEngimon().getItem(i).getEngimonName(),map.getNumberOfColumn() * map.getTilesize()+20,125+(25*i));
+            //g.drawString(getActiveEngimonId(),map.getNumberOfColumn() * map.getTilesize()+20,125+(25*i));
+        }
+
+    }
+
+    public void draw_Player(Graphics2D g,int w, int h){
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(new Color(102,51,0));
+        g2.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
+        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+        g.drawString("* Player :  ",map.getNumberOfColumn()*map.getTilesize()-20,125);
+        g.drawString(this.getPlayerName(),map.getNumberOfColumn()*map.getTilesize(),150);
+        g.drawString("* Active Engimon :  ",map.getNumberOfColumn()*map.getTilesize()-20,200);
+        g.drawString(this.getActiveEngimon().getEngimonName(),map.getNumberOfColumn()*map.getTilesize(),225);
+        g.drawString("* Level :  ",map.getNumberOfColumn()*map.getTilesize()-20,275);
+        g.drawString(String.format("%d",this.getActiveEngimon().getEngimonLevel()),map.getNumberOfColumn()*map.getTilesize(),300);
+
+        g.drawString("* Exp :  ",map.getNumberOfColumn()*map.getTilesize()-20,350);
+        g.drawString(String.format("%d",this.getActiveEngimon().getEngimonExp()),map.getNumberOfColumn()*map.getTilesize(),375);
+    }
+
+    public void draw_Skill(Graphics2D g,int w, int h){
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(new Color(102,51,0));
+        g2.fillRect((map.getNumberOfColumn()*map.getTilesize())-75,0,w,h);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("MicrosoftYaHei",Font.BOLD,35));
+        g.drawString("Status",map.getNumberOfColumn()*map.getTilesize()+20,50);
+
+        g.setColor(new Color(255,217,179));
+        g.setFont(new Font("Microsoft YaHei", Font.PLAIN, 20));
+
+        g.drawString("* Active Engimon :",map.getNumberOfColumn()*map.getTilesize()-20,100);
+        g.drawString(this.getActiveEngimon().getEngimonName(),map.getNumberOfColumn()*map.getTilesize(),125);
+        g.drawString("* Skill:",map.getNumberOfColumn()*map.getTilesize()-20,175);
+        Skill[] c = this.getActiveEngimon().engimonSkill;
+        try{
+            String backgroundPath = "resources/firee_10.png";
+            backgroundImage = ImageIO.read(new FileInputStream(backgroundPath));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        for(int i=0; i <this.getActiveEngimon().getNumberOfSkill();i++){
+            g.drawString(c[i].getName(),map.getNumberOfColumn()*map.getTilesize(),200+(50*i));
+            g.drawString(String.format("%d",c[i].getMasteryLevel()),map.getNumberOfColumn()*map.getTilesize(),225+(50*i));
+            if(c[i].getMasteryLevel() == 10) {
+                g.drawImage(backgroundImage, map.getNumberOfColumn()*map.getTilesize()-20,225+(50*i),40,40,null);
+            }
+            if(c[i].getMasteryLevel() == 15) {
+
+            }
+            if(c[i].getMasteryLevel() == 20) {
+
+            }
+            //g.drawString(c[i].g,map.getNumberOfColumn()*map.getTilesize(),200+(25*i));
+        }
+
     }
 }

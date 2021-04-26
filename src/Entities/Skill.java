@@ -82,6 +82,8 @@ public class Skill implements Serializable {
         }
         return result;
     }
+
+
 }
 
 /*Skill("Mud Shot",9,15,skillCompatibleElement))

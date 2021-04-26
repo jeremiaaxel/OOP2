@@ -22,12 +22,15 @@ public class PlayingState extends GameState {
     private final int panelSize = 300;
     private final long spawnDelay = 8000;
     private long startTime;
+    private int panelstate;
+
 
     public PlayingState(GameStateManager gameStateManager, boolean newgame){
         this.gameStateManager = gameStateManager;
         this.newgame = newgame;
         this.startTime = System.nanoTime();
     }
+
 
     private void print(Object obj, Object end) {
         System.out.print(obj);
@@ -139,6 +142,27 @@ public class PlayingState extends GameState {
 //        map.displayMap();
     }
 
+    public void viewPanel(Graphics2D g){
+        int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
+        int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
+        switch (panelstate){
+            case 1 :
+                player.draw_Skill(g, panelWidth, panelHeight);
+                break;
+            case 2 :
+                player.draw_Player(g, panelWidth, panelHeight);
+                break;
+            case 3 :
+                wildEngimon.draw_WildEngimon(g, panelWidth, panelHeight);
+                break;
+            case 4 :
+                player.draw_listEngimon(g, panelWidth, panelHeight);
+                break;
+            default:
+                break;
+        }
+    }
+
     public synchronized void keyPressed(int key){
         switch (key) {
             case KeyEvent.VK_SPACE:
@@ -162,22 +186,23 @@ public class PlayingState extends GameState {
                 commandQuit();
                 break;
             case KeyEvent.VK_1:
-//                commandPlayer1
+                panelstate = 1;
                 break;
             case KeyEvent.VK_2:
-//                commandPlayer12
+                panelstate = 2;
                 break;
             case KeyEvent.VK_3:
                 //switch active engimon
-                int test = 2;
-                player.switchActiveEngimon(2);
-                player.getActiveEngimon().displayEngimonInfo();
+                //int test = 2;
+                //player.switchActiveEngimon(2);
+                //player.getActiveEngimon().displayEngimonInfo();
+                panelstate =3;
                 break;
             case KeyEvent.VK_4:
-//                commandPlayer4
+                panelstate = 4;
                 break;
             case KeyEvent.VK_5:
-//                commandPlayer5
+                panelstate = 5;
                 break;
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
@@ -208,7 +233,7 @@ public class PlayingState extends GameState {
                     new_eng = new Araquanid("Wild Araquanid",new Parent(),map.getEmptyTileInRowNWithType(7,'s'),map);
                     break;
                 case 3:
-                    new_eng = new Blaziken("Wild Blaziken",new Parent(),map.getEmptyTileInRowNWithType(0,'m'),map);
+                    new_eng = new Blaziken("Wild Blaziken",new Parent(),map.getEmptyTileInRowNWithType(1,'m'),map);
                     break;
                 default:
                     new_eng = new Eiscue("Wild Eiscue",new Parent(),map.getEmptyTileInRowNWithType(10,'t'),map);
@@ -254,6 +279,7 @@ public class PlayingState extends GameState {
             map.drawMap(g);
             wildEngimon.draw(g);
             player.draw(g);
+            viewPanel(g);
         }
     }
 

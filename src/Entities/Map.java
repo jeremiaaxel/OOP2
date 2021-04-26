@@ -60,10 +60,10 @@ public class Map implements Serializable {
 
     public void loadTileImg(){
         try{
-            mountain_tile = ImageIO.read(new FileInputStream("../resources/mountains.jpg"));
-            grassland_tile = ImageIO.read(new FileInputStream("../resources/grassland.jpg"));
-            tundra_tile = ImageIO.read(new FileInputStream("../resources/tundra.jpg"));
-            sea_tile = ImageIO.read(new FileInputStream("../resources/sea.png"));
+            mountain_tile = ImageIO.read(new FileInputStream("resources/mountains.jpg"));
+            grassland_tile = ImageIO.read(new FileInputStream("resources/grassland.jpg"));
+            tundra_tile = ImageIO.read(new FileInputStream("resources/tundra.jpg"));
+            sea_tile = ImageIO.read(new FileInputStream("resources/sea.png"));
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -141,7 +141,7 @@ public class Map implements Serializable {
             j = 1;
             while (!found && j < col_size-1)
             {
-                if (this.map[i][j].getType() == type && this.map[i][j].getOccupierCode() == ' ')
+                if (this.map[i][j].getType() == type && this.map[i][j].getOccupierCode() == NO_OCCUPIER)
                 {
                     found = true;
                 }
@@ -183,8 +183,6 @@ public class Map implements Serializable {
             System.out.println();
         }
     }
-
-
     
     public String parse(String filepath) throws IOException {
         String text = "";
@@ -207,7 +205,6 @@ public class Map implements Serializable {
     }
 
     public boolean isOccupied(int brs, int klm){
-        System.out.println(brs+"    ,    "+klm);
         return map[brs][klm].getOccupierCode() == Map.OCCUPIED;
     }
 

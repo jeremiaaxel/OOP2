@@ -47,6 +47,7 @@ public abstract class Engimon extends MapObject implements Serializable {
         height -= 5;
 
         this.setTilePosition(position);
+        setPositionByMap(position.getAbsis(),position.getOrdinat());
         loadImg();
     }
 
@@ -164,9 +165,6 @@ public abstract class Engimon extends MapObject implements Serializable {
         this.messageUnik = msg;
     }
     public void setTilePosition(Tile t){
-        map.setTileOcc(currentPosition,map.NO_OCCUPIER);
-        map.setTileOcc(t.getOrdinat(),t.getAbsis(),map.OCCUPIED);
-        setPositionByMap(t.getAbsis(),t.getOrdinat());
         this.currentPosition = t;
     }
 
@@ -249,33 +247,28 @@ public abstract class Engimon extends MapObject implements Serializable {
             ytemp += moveDistance;
         }
 
-        if (xtemp<0 || ytemp <0
-                || ytemp >= map.getTilesize()*(map.getNumberOfRow()-3)
-                || xtemp >= map.getTilesize()*(map.getNumberOfColumn()-3)){
+        if (checkCollision()){
             xtemp = x;
             ytemp = y;
         }
 
         if (wild){
-            /*System.out.println("map :" + currentPosition.getOrdinat() +"," + currentPosition.getAbsis());
-            System.out.println("map :" + getMapRowFromOrd(ytemp) +"," + getMapColFromAbsis(xtemp));
-            System.out.println("type :" + map.getTile(getMapRowFromOrd(ytemp),
-                    getMapColFromAbsis(xtemp)).getType());
-            displayAllEngimonElement();
-            System.out.println(isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
-                    getMapColFromAbsis(xtemp)).getType()));*/
             if (isTileTypeCompatible(map.getTile(getMapRowFromOrd(ytemp),
                     getMapColFromAbsis(xtemp)).getType())){
-                // System.out.println("masuk");
+                setPosition(xtemp,ytemp);
                 setTilePosition(map.getTile(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)));
             };
         } else {
-            setTilePosition(map.getTile(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)));
+            setPosition(xtemp,ytemp);
+            setTilePosition(map.getTile(getMapRowFromOrd(y_map),getMapColFromAbsis(x_map)));
         }
     }
 
     public boolean checkCollision(){
-        if (map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp))){
+        if ((xtemp<0 || ytemp <0
+                || ytemp >= map.getTilesize()*(map.getNumberOfRow()-2)
+                || xtemp >= map.getTilesize()*(map.getNumberOfColumn()-2)) ||
+                (map.isOccupied(getMapRowFromOrd(ytemp),getMapColFromAbsis(xtemp)))){
             return true;
         }
         return false;

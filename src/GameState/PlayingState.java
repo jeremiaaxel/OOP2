@@ -170,6 +170,7 @@ public class PlayingState extends GameState {
     }
 
     public synchronized void keyPressed(int key){
+        int id;
         switch (key) {
             case KeyEvent.VK_SPACE:
 //                doBattle();
@@ -204,20 +205,50 @@ public class PlayingState extends GameState {
                 panelstate = 4;
                 break;
             case KeyEvent.VK_5:
-                //switch active engimon
-                player.setIdle(true);
-                int id = getIntInput(player.getListIdEng(),
+                //check and switch active engimon
+                panelstate = 2;
+                id = getIntInput(player.getListIdEng(),
                         "Masukkan ID engimon","Switch Active Engimon");
                 player.switchActiveEngimon(id);
                 break;
+            case KeyEvent.VK_6:
+                // rename engimon
+                id = getIntInput(player.getListIdEng(),
+                        "Masukkan ID engimon","Rename Engimon");
+                String new_name = getStrInput("Masukkan nama baru untuk engimon mu",
+                        "Rename Engimon");
+                player.getEngimon(id).setEngimonName(new_name);
+                break;
+            case KeyEvent.VK_7:
+                // melepas skill/engimon
+                id = getIntInput(new Object[]{1,2},
+                        "Pilih jenis item yang akan dilepas\n1 : Skill\n2 : Engimon)",
+                        "Show Engimon Details");
+                if (id == 1){
+                    // tampilin option list id skill dulu
+//                    player.throwSomeSkillItems(player.getSkillItem(),id);
+                } else{
+                    id = getIntInput(player.getListIdEng(),
+                            "Pilih ID Engimon yang akan dilepas\n1 : Skill\n2 : Engimon)",
+                            "Show Engimon Details");
+                    player.freeTheEngimon(id);
+                }
+                break;
+            case KeyEvent.VK_8:
+                // detail suatu engimon
+                id = getIntInput(player.getListIdEng(),
+                        "Masukkan ID engimon","Show Engimon Details");
+//                player.showDetails(id);
             case KeyEvent.VK_ESCAPE:
                 commandQuit();
             default:
+
                 break;
         }
     }
 
     public int getIntInput(Object[] possibilities, String message, String title){
+        player.setIdle(true);
         JFrame f = new JFrame();
         int s = (int) JOptionPane.showInputDialog(
                 f,
@@ -227,8 +258,20 @@ public class PlayingState extends GameState {
                 null,
                 possibilities,
                 "ham");
+        return s;
+    }
 
-        //If a string was returned, say so.
+    public String getStrInput(String message, String title){
+        player.setIdle(true);
+        JFrame f = new JFrame();
+        String s = (String) JOptionPane.showInputDialog(
+                f,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "");
         return s;
     }
 

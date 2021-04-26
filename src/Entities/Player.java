@@ -200,6 +200,7 @@ public class Player extends MapObject implements Serializable {
     public void switchActiveEngimon(int new_eng_id) {
         if (new_eng_id != activeEngimonId){
             Tile oldActiveEngTile = new Tile();
+            this.getEngimon(new_eng_id).setPosition(getActiveEngimon().x,getActiveEngimon().y);
             oldActiveEngTile.set(this.getActiveEngimon().getCurrentPosition());
             this.setActiveEngimonId(new_eng_id);
             this.getActiveEngimon().setTilePosition(oldActiveEngTile);
@@ -440,6 +441,7 @@ public class Player extends MapObject implements Serializable {
             currentPosition = map.getTile(y_map,x_map);
 //            setActiveEngimonPosition(map.getTile(getMapRowFromOrd(yactiveEng),getMapColFromAbsis(xactiveEng)));
             getActiveEngimon().setPosition(xactiveEng,yactiveEng);
+            getActiveEngimon().setTilePosition(map.getTile(y_map,x_map));
         }
     }
 

@@ -3,14 +3,26 @@ package Entities;
 import java.util.Scanner;
 import java.lang.*;
 import java.util.Vector;
+import java.awt.*;
+import java.awt.image.*;
+import javax.imageio.ImageIO;
 
 public class Breeding extends Exception{
     protected boolean successBreed;
     protected Skill[] skillGabungan;
     protected Skill[] sortedSkill;
     protected int numberOfSkill;
+    protected int tempNumberOfSkill;
 
-    public Breeding(Engimon e1, Engimon e2, Tile childPosition/*, Player player*/){
+    public static BufferedImage mountain_tile;
+    public static BufferedImage grassland_tile;
+    public static BufferedImage tundra_tile;
+    public static BufferedImage sea_tile;
+
+    public static final char NO_OCCUPIER = ' ';
+    public static final char OCCUPIED = 'x';
+
+    public Breeding(Engimon e1, Engimon e2, Tile childPosition/*, Map Player player*/){
         this.successBreed = false;
         this.numberOfSkill = 0;
         makeChild(e1, e2, childPosition/*, player*/);
@@ -233,7 +245,7 @@ public class Breeding extends Exception{
     public void addSkillWithPrior(Engimon e1, Engimon e2, Engimon eChild){
         int A = e1.getNumberOfSkill();
         int B = e2.getNumberOfSkill();
-
+        this.skillGabungan = new Skill[A+B];
         for (int i=0; i < A; i++){
             this.skillGabungan[i] = e1.getNthEngimonSkill(i+1);
         }
@@ -241,14 +253,11 @@ public class Breeding extends Exception{
             this.skillGabungan[i+A] = e2.getNthEngimonSkill(i+1);
         }
 
-        int tempNumberOfSkill = A+B;
-        this.skillGabungan = new Skill[A+B];
+        this.tempNumberOfSkill = A+B;
         this.sortedSkill = new Skill[A+B];
-        sortSkill(tempNumberOfSkill);
+        sortSkill();
 
-        tempNumberOfSkill = hitungBanyakSkill(this.skillGabungan);
-
-        if (tempNumberOfSkill > 3){
+        if (this.tempNumberOfSkill > 3){
             for (int i=0; i < 3; i++){
                 try{
                     eChild.addSkill(this.skillGabungan[i]);
@@ -259,7 +268,7 @@ public class Breeding extends Exception{
             }
         }
         else{
-            for (int i=0; i < tempNumberOfSkill; i++){
+            for (int i=0; i < this.tempNumberOfSkill; i++){
                 try{
                     eChild.addSkill(this.skillGabungan[i]);
                     this.numberOfSkill++;
@@ -268,7 +277,7 @@ public class Breeding extends Exception{
                 }
             }
         }
-
+        
         //delSkillAfterMerge
         boolean sama = false;
         for (int i=1; i < eChild.getNumberOfSkill(); i++){
@@ -285,7 +294,7 @@ public class Breeding extends Exception{
                 System.out.println(err.getMessage());
             }
             this.numberOfSkill--;
-            if (tempNumberOfSkill > 3){
+            if (this.tempNumberOfSkill > 3){
                 try{
                     eChild.addSkill(this.skillGabungan[3]);
                 } catch (Exception err){
@@ -297,62 +306,64 @@ public class Breeding extends Exception{
         
     }
 
-    public void sortSkill(int temp){
-        int tempSkill = temp;
+    public void sortSkill(){
+        int tempSkill = this.tempNumberOfSkill;
         //Skill[] sortedSkill = new Skill[temp];
 
-        for (int i=0; i < temp; i++){
+        for (int i=0; i < tempSkill; i++){
             int max = 0;
-            for (int j=0; j < temp; j++){
+            for (int j=0; j < this.tempNumberOfSkill; j++){
                 if (this.skillGabungan[max].getMasteryLevel() < this.skillGabungan[j].getMasteryLevel()){
                     max = j;
                 }
             }
 
             this.sortedSkill[i] = this.skillGabungan[max];
-            for (int k=max; k < temp-1; k++){
+            for (int k=max; k < this.tempNumberOfSkill-1; k++){
                 this.skillGabungan[k] = this.skillGabungan[k+1];
             }
-            temp--;
+            this.tempNumberOfSkill--;
             max = 0;
         }
 
-        temp = tempSkill;
+        this.tempNumberOfSkill = tempSkill;
 
-        for (int i=0; i < temp; i++){
+        for (int i=0; i < this.tempNumberOfSkill; i++){
             this.skillGabungan[i] = this.sortedSkill[i];
         }
-
+        
         //delete skill yang double
-        for (int i=0; i < temp; i++){
-            for (int j=i+1; j < temp; j++){
-                if (this.skillGabungan[i].getName() == this.skillGabungan[j].getName()){
-                    if (this.skillGabungan[i].getMasteryLevel() == this.skillGabungan[j].getMasteryLevel()){
-                        if (this.skillGabungan[i].getMasteryLevel() < 3){
-                            this.skillGabungan[i].setMasteryLevel(this.skillGabungan[i].getMasteryLevel()+1);
-                            for (int k=j; k < temp-1; k++){
+        for (int i=0; i < this.tempNumberOfSkill; i++){
+            for (int j=i+1; j < this.tempNumberOfSkill; j++){
+                    if (this.skillGabungan[i].getName() == this.skillGabungan[j].getName()){
+                        if (this.skillGabungan[i].getMasteryLevel() == this.skillGabungan[j].getMasteryLevel()){
+                            if (this.skillGabungan[i].getMasteryLevel() < 3){
+                                this.skillGabungan[i].setMasteryLevel(this.skillGabungan[i].getMasteryLevel()+1);
+                            }
+                            
+                            for (int k=j; k < this.tempNumberOfSkill-1; k++){
                                 this.skillGabungan[k] = this.skillGabungan[k+1];
                             }
-                            temp--;
-                        }
-                    }
-                    else{
-                        int lvl = 0;
-                        if (this.skillGabungan[i].getMasteryLevel() > this.skillGabungan[j].getMasteryLevel()){
-                            lvl = this.skillGabungan[i].getMasteryLevel();
+                            this.tempNumberOfSkill--;
                         }
                         else{
-                            lvl = this.skillGabungan[j].getMasteryLevel();
+                            int lvl = 0;
+                            if (this.skillGabungan[i].getMasteryLevel() > this.skillGabungan[j].getMasteryLevel()){
+                                lvl = this.skillGabungan[i].getMasteryLevel();
+                            }
+                            else{
+                                lvl = this.skillGabungan[j].getMasteryLevel();
+                            }
+                            
+                            this.skillGabungan[i].setMasteryLevel(lvl);
+                            for (int k=j; k < this.tempNumberOfSkill-1; k++){
+                                this.skillGabungan[k] = this.skillGabungan[k+1];
+                            }
+                            this.tempNumberOfSkill--;
                         }
-                        
-                        this.skillGabungan[i].setMasteryLevel(lvl);
-                        for (int k=j; k < temp-1; k++){
-                            this.skillGabungan[k] = this.skillGabungan[k+1];
-                        }
-                        temp--;
+                        break;
                     }
-                    break;
-                }
+                
             }
         }
     }
@@ -367,7 +378,7 @@ public class Breeding extends Exception{
 
     public static void main(String[] args) throws Exception{
         Map map = new Map();
-        String map_text = map.parse("data/map.txt");
+        String map_text = map.parse("../data/map.txt");
         map = new Map(16, 20, map_text);
         Parent parent1 = new Parent("A1", "Aggron", "A2", "Aggron");
         Parent parent2 = new Parent("B1", "Ampharos", "B2", "Ampharos");
@@ -377,16 +388,17 @@ public class Breeding extends Exception{
         Parent parent6 = new Parent("F1", "Loceam", "F2", "Loceam");
         Parent parent7 = new Parent("G1", "Megalapras", "G2", "Megalapras");
         Parent parent8 = new Parent("H1", "Meganium", "H2", "Meganium");
-        Tile position = new Tile();
-        Engimon e1 = new Aggron("Satu", parent1, position,map );
-        Engimon e2 = new Ampharos("Dua", parent2, position,map);
-        Engimon e3 = new Araquanid("Tiga", parent3, position,map);
-        Engimon e4 = new Blaziken("Empat", parent4, position,map);
-        Engimon e5 = new Eiscue("Lima", parent5, position,map);
-        Engimon e6 = new Loceam("Enam", parent6, position,map);
-        Engimon e7 = new Megalapras("Tujuh", parent7, position,map);
-        Engimon e8 = new Meganium("Delapan", parent8, position,map);
-        Engimon e9 = new Aggron("Sembilan", parent1, position,map);
+        char type = '#';
+        Tile position = new Tile(1, 1, type, NO_OCCUPIER, mountain_tile);
+        Engimon e1 = new Aggron("Satu", parent1, position, map);
+        Engimon e2 = new Ampharos("Dua", parent2, position, map);
+        Engimon e3 = new Araquanid("Tiga", parent3, position, map);
+        Engimon e4 = new Blaziken("Empat", parent4, position, map);
+        Engimon e5 = new Eiscue("Lima", parent5, position, map);
+        Engimon e6 = new Loceam("Enam", parent6, position, map);
+        Engimon e7 = new Megalapras("Tujuh", parent7, position, map);
+        Engimon e8 = new Meganium("Delapan", parent8, position, map);
+        Engimon e9 = new Aggron("Sembilan", parent1, position, map);
         
         e1.setLevel(5);
         e2.setLevel(5);

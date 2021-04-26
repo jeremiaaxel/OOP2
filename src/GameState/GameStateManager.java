@@ -11,6 +11,8 @@ public class GameStateManager {
     public static final int MENUSTATE = 0;
     public static final int NEWGAME = 1;
     public static final int LOADGAME = 2;
+    public static final int LOSE = 3;
+    public static final int WIN = 4;
 
     public GameStateManager(){
         gameStates = new ArrayList<GameState>();
@@ -19,10 +21,8 @@ public class GameStateManager {
         gameStates.add(new MenuState(this));
         gameStates.add(new PlayingState(this, true));
         gameStates.add(new PlayingState(this, false));
-
-        // load
-//        gameStates.add(new PlayingState(this, false));
-
+        gameStates.add(new LoseState(this));
+        gameStates.add(new WinningState(this));
 
     }
 
@@ -31,7 +31,7 @@ public class GameStateManager {
         gameStates.get(currentState).init();
     }
 
-    public void update(){
+    public void update() throws Exception{
         gameStates.get(currentState).update();
     }
 

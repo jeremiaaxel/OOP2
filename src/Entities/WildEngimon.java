@@ -81,6 +81,11 @@ public class WildEngimon implements Serializable {
         this.getNthEngimon(n).getCurrentPosition().setOccupier(' ');
         wildEngimonList.remove(n);
     }
+
+    public void deleteEng(Engimon eng){
+        wildEngimonList.remove(eng);
+    }
+
     public void randomMove(){
         if (getNumberOfWildEngimon() == 0){ return; }
         long elapsed = (System.nanoTime() - moveStartTime)/ 1000000;

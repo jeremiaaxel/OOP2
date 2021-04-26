@@ -54,14 +54,13 @@ public class Battle {
 
     public void enemyWins(Map map, Player player, WildEngimon engEnemy) {
         player.removeEngimon(player.getActiveEngimonId());
-
+        
         if (player.getOwnedEngimonSize() > 0) {
             player.showOwnedEngimons();
             System.out.println("Pilih ID engimon baru yang akan dipakai!");
             Scanner inputID = new Scanner(System.in);
             int idEngimonBerikut = inputID.nextInt();
             player.switchActiveEngimon(idEngimonBerikut);
-
         } else {
             System.out.println("You're dead, man!");
         }
@@ -78,7 +77,6 @@ public class Battle {
     /*wprivate void kepemilikanEngimon(Engimon engimon, Player player) {
         player.addEngimon(engimon);
     }
-
     private void killWildEngimon(WildEngimon listWildEgimon, Engimon kalah) {
         listWildEgimon.deleteNthWildEngimon(listWildEgimon.posisiWildEngimonDiList(kalah) + 1);
     }*/

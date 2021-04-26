@@ -61,8 +61,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         while (running){
             start = System.nanoTime();
-
-            update();
+            try{
+                update();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             draw();
             drawToScreen();
 
@@ -79,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         }
     }
 
-    private void update(){
+    private void update() throws Exception{
         gameStateManager.update();
     }
 

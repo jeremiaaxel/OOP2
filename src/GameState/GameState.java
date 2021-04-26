@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 public abstract class GameState {
     protected GameStateManager gameStateManager;
     public abstract void init();
-    public abstract void update();
+    public abstract void update() throws Exception;
     public abstract void draw(Graphics2D g);
 
     public abstract void keyPressed(int key);

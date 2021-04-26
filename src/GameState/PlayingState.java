@@ -29,11 +29,15 @@ public class PlayingState extends GameState {
     private int intInput;
     private String stringInput;
 
+    boolean player_win;
+    boolean gameover;
+
 
     public PlayingState(GameStateManager gameStateManager, boolean newgame){
         this.gameStateManager = gameStateManager;
         this.newgame = newgame;
         this.startTime = System.nanoTime();
+        this.gameover = false;
     }
 
 
@@ -167,9 +171,6 @@ public class PlayingState extends GameState {
             WildEngimon wileng = (WildEngimon) in.readObject();
             in.close();
             fileIn.close();
-      /*for (int i = 0; i < wil.getNumberOfWildEngimon(); i++) {
-                wildEngimon.addWildEngimon(new Engimon(wil.getNthEngimon(i)));
-            }*/
 
             for (int i = 0; i < wileng.getNumberOfWildEngimon(); i++) {
                 loadWildEngimon(wileng.getNthEngimon(i));
@@ -205,12 +206,19 @@ public class PlayingState extends GameState {
         }
         player.update(wildEngimon);
         wildEngimon.update(player);
+
         if (wildEngimon.getNumberOfWildEngimon() == 0){
-            System.out.println("GAME OVER!!!");
-            gameStateManager.setGameStates(gameStateManager.MENUSTATE);
+            player_win = true;
+            gameover = true;
+            gameStateManager.setGameStates(GameStateManager.WIN);
+        }
+        if (player.getOwnedEngimon().size() == 0){
+            player_win = false;
+            gameover = true;
+            gameStateManager.setGameStates(GameStateManager.LOSE);
         }
         spawnRandowmWildEngimon();
-//        map.displayMap();
+//
     }
 
     public void viewPanel(Graphics2D g){
@@ -487,15 +495,10 @@ public class PlayingState extends GameState {
     }
 
     public synchronized void draw(Graphics2D g){
+
         if (player == null) {
             print("Something went wrong [draw]");
         } else {
-            // clear screen
-//            g.setColor(Color.BLACK);
-//            int panelWidth = GamePanel.WIDTH*GamePanel.SCALE - map.getTilesize()* (map.getNumberOfColumn()-2);
-//            int panelHeight =(map.getNumberOfRow()-2)*map.getTilesize();
-//            g.fillRect((map.getNumberOfColumn()-2) * map.getTilesize(),0,panelWidth, panelHeight);
-
             // draw map
             map.drawMap(g);
             wildEngimon.draw(g);
